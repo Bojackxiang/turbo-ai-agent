@@ -1,5 +1,5 @@
 import Image, { type ImageProps } from "next/image";
-import { Button } from "@repo/ui/button";
+import { Button, cn } from "@repo/ui";
 import styles from "./page.module.css";
 import { add } from "@repo/math/add";
 
@@ -65,7 +65,7 @@ export default function Home() {
             Read our docs
           </a>
         </div>
-        <Button appName="web" className={styles.secondary}>
+        <Button variant="outline" className={cn(styles.secondary)}>
           Open alert
         </Button>
       </main>
