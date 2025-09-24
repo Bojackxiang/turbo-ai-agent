@@ -11,8 +11,10 @@
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
+    "@repo/backend": "workspace:*",
     "@repo/math": "workspace:*",
     "@repo/ui": "workspace:*",
+    "convex": "^1.27.3",
     "next": "^15.5.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
