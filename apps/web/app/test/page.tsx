@@ -1,11 +1,52 @@
 "use client";
 
 import { Button } from "@repo/ui";
+import { useUser, useClerk } from "@clerk/nextjs";
+import Link from "next/link";
 
 export default function TestPage() {
+  const { user, isLoaded } = useUser();
+  const { signOut } = useClerk();
+
+  if (!isLoaded) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        Loading...
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-8">
       <div className="max-w-4xl mx-auto space-y-8">
+        {/* Auth Status Header */}
+        <div className="bg-white rounded-lg shadow p-4 flex justify-between items-center">
+          <div>
+            <h3 className="font-semibold">User Status</h3>
+            <p className="text-sm text-gray-600">
+              {user
+                ? `Signed in: ${user.primaryEmailAddress?.emailAddress}`
+                : "Not signed in"}
+            </p>
+          </div>
+          <div className="flex gap-2">
+            {user ? (
+              <Button onClick={() => signOut()} variant="outline">
+                Sign Out
+              </Button>
+            ) : (
+              <>
+                <Link href="/sign-in">
+                  <Button variant="outline">Sign In</Button>
+                </Link>
+                <Link href="/sign-up">
+                  <Button>Sign Up</Button>
+                </Link>
+              </>
+            )}
+          </div>
+        </div>
+
         <header className="text-center">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
             Shadcn/UI + Tailwind CSS Production Test

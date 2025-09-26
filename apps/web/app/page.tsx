@@ -1,20 +1,11 @@
 "use client";
 
-import Image, { type ImageProps } from "next/image";
-import { Button, cn } from "@repo/ui";
-import styles from "./page.module.css";
-import { add } from "@repo/math/add";
 import { api } from "../../../packages/backend/convex/_generated/api";
-import { useQuery } from "convex/react";
-import { Providers } from "./components/providers";
+import { Authenticated, Unauthenticated, useQuery } from "convex/react";
+import { UserButton } from "@clerk/nextjs";
+import Link from "next/link";
 
-type Props = Omit<ImageProps, "src"> & {
-  srcLight: string;
-  srcDark: string;
-};
-
-const ThemeImage = (props: Props) => {
-  const { srcLight, srcDark, ...rest } = props;
+const ThemeImage = () => {
   const users = useQuery(api.user.getMany);
   console.log("users: ", users);
 
@@ -36,86 +27,84 @@ const ThemeImage = (props: Props) => {
 
 export default function Home() {
   return (
-    <Providers>
-      <div className={styles.page}>
-        <main className={styles.main}>
-          {add(1, 2)}
-          <ThemeImage
-            className={styles.logo}
-            srcLight="turborepo-dark.svg"
-            srcDark="turborepo-light.svg"
-            alt="Turborepo logo"
-            width={180}
-            height={38}
-            priority
-          />
-          <ol>
-            <li>
-              Get started by editing <code>apps/web/app/page.tsx</code>
-            </li>
-            <li>Save and see your changes instantly.</li>
-          </ol>
-
-          <div className={styles.ctas}>
-            <a
-              className={styles.primary}
-              href="https://vercel.com/new/clone?demo-description=Learn+to+implement+a+monorepo+with+a+two+Next.js+sites+that+has+installed+three+local+packages.&demo-image=%2F%2Fimages.ctfassets.net%2Fe5382hct74si%2F4K8ZISWAzJ8X1504ca0zmC%2F0b21a1c6246add355e55816278ef54bc%2FBasic.png&demo-title=Monorepo+with+Turborepo&demo-url=https%3A%2F%2Fexamples-basic-web.vercel.sh%2F&from=templates&project-name=Monorepo+with+Turborepo&repository-name=monorepo-turborepo&repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fturborepo%2Ftree%2Fmain%2Fexamples%2Fbasic&root-directory=apps%2Fdocs&skippable-integrations=1&teamSlug=vercel&utm_source=create-turbo"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Image
-                className={styles.logo}
-                src="/vercel.svg"
-                alt="Vercel logomark"
-                width={20}
-                height={20}
-              />
-              Deploy now
-            </a>
-            <a
-              href="https://turborepo.com/docs?utm_source"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.secondary}
-            >
-              Read our docs
-            </a>
+    <div className="min-h-screen bg-gray-50">
+      {/* Navigation Header */}
+      <nav className="bg-white shadow-sm border-b">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <div className="flex items-center">
+              <h1 className="text-xl font-bold text-gray-900">AI Client</h1>
+            </div>
+            <div className="flex items-center space-x-4">
+              <Authenticated>
+                <Link href="/test" className="text-gray-600 hover:text-gray-900">
+                  Test Page
+                </Link>
+                <Link
+                  href="/debug-auth"
+                  className="text-gray-600 hover:text-gray-900"
+                >
+                  Debug Auth
+                </Link>
+                <UserButton />
+              </Authenticated>
+              <Unauthenticated>
+                <Link
+                  href="/sign-in"
+                  className="text-gray-600 hover:text-gray-900"
+                >
+                  Sign In
+                </Link>
+                <Link
+                  href="/sign-up"
+                  className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+                >
+                  Sign Up
+                </Link>
+              </Unauthenticated>
+            </div>
           </div>
-          <Button variant="outline" className={cn(styles.secondary)}>
-            Open alert
-          </Button>
-        </main>
-        <footer className={styles.footer}>
-          <a
-            href="https://vercel.com/templates?search=turborepo&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              aria-hidden
-              src="/window.svg"
-              alt="Window icon"
-              width={16}
-              height={16}
-            />
-            Examples
-          </a>
-          <a
-            href="https://turborepo.com?utm_source=create-turbo"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              aria-hidden
-              src="/globe.svg"
-              alt="Globe icon"
-              width={16}
-              height={16}
-            />
-            Go to turborepo.com →
-          </a>
-        </footer>
-      </div>
-    </Providers>
+        </div>
+      </nav>
+
+      {/* Main Content */}
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <Authenticated>
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              Welcome Back!
+            </h2>
+            <p className="text-lg text-gray-600">
+              You are successfully logged in and connected to Convex database
+            </p>
+          </div>
+          <ThemeImage />
+        </Authenticated>
+        <Unauthenticated>
+          <div className="text-center py-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              Welcome to AI Client
+            </h2>
+            <p className="text-lg text-gray-600 mb-8">
+              Please sign in to access full features
+            </p>
+            <div className="space-x-4">
+              <Link
+                href="/sign-in"
+                className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 inline-block"
+              >
+                Sign In Now
+              </Link>
+              <Link
+                href="/sign-up"
+                className="bg-gray-200 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-300 inline-block"
+              >
+                Create Account
+              </Link>
+            </div>
+          </div>
+        </Unauthenticated>
+      </main>
+    </div>
   );
 }
