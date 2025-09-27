@@ -1,13 +1,13 @@
 "use client";
 
-import { api } from "../../../packages/backend/convex/_generated/api";
+import { api } from "../../../../packages/backend/convex/_generated/api";
 import { Authenticated, Unauthenticated, useQuery } from "convex/react";
 import { UserButton } from "@clerk/nextjs";
 import Link from "next/link";
+import OrgGuard from "../../modules/auth/ui/components/org-guard";
 
 const ThemeImage = () => {
   const users = useQuery(api.user.getMany);
-  console.log("users: ", users);
 
   return (
     <div className="flex flex-col items-center justify-center w-full p-4">
@@ -37,7 +37,10 @@ export default function Home() {
             </div>
             <div className="flex items-center space-x-4">
               <Authenticated>
-                <Link href="/test" className="text-gray-600 hover:text-gray-900">
+                <Link
+                  href="/test"
+                  className="text-gray-600 hover:text-gray-900"
+                >
                   Test Page
                 </Link>
                 <Link
@@ -78,7 +81,9 @@ export default function Home() {
               You are successfully logged in and connected to Convex database
             </p>
           </div>
-          <ThemeImage />
+          <OrgGuard>
+            <ThemeImage />
+          </OrgGuard>
         </Authenticated>
         <Unauthenticated>
           <div className="text-center py-12">
