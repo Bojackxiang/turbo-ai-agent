@@ -5,6 +5,7 @@ import { Authenticated, Unauthenticated, useQuery } from "convex/react";
 import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 import { Organization } from "@clerk/nextjs/server";
+import OrgGuard from "../../modules/auth/ui/components/org-guard";
 
 const ThemeImage = () => {
   const users = useQuery(api.user.getMany);
@@ -82,8 +83,9 @@ export default function Home() {
               You are successfully logged in and connected to Convex database
             </p>
           </div>
-          <ThemeImage />
-          <OrganizationSwitcher hidePersonal={true} />
+          <OrgGuard>
+            <ThemeImage />
+          </OrgGuard>
         </Authenticated>
         <Unauthenticated>
           <div className="text-center py-12">

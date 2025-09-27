@@ -13,7 +13,7 @@ export const SignInView = () => {
           path="/sign-in"
           routing="path"
           signUpUrl="/sign-up"
-          afterSignInUrl="/"
+          fallbackRedirectUrl="/"
           appearance={{
             elements: {
               formButtonPrimary:
