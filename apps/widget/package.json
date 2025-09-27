@@ -11,8 +11,9 @@
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
-    "@repo/ui": "workspace:*",
     "@repo/backend": "workspace:*",
+    "@repo/ui": "workspace:*",
+    "@vapi-ai/web": "^2.4.0",
     "convex": "^1.27.3",
     "next": "^15.5.0",
     "react": "^19.1.0",
