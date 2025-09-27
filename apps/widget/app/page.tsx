@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@repo/ui";
+import { Button } from "@/components/ui/button";
 import { useVapi } from "../modules/hooks/use-vapi";
 
 export default function Home() {

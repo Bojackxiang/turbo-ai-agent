@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@repo/ui";
+import { Button } from "@/components/ui/button";
 import { useUser, useClerk } from "@clerk/nextjs";
 import Link from "next/link";
 

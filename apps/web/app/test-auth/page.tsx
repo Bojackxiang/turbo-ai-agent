@@ -1,9 +1,10 @@
 "use client";
 
 import { api } from "../../../../packages/backend/convex/_generated/api";
-import { Button } from "@repo/ui/button";
+
 import { useQuery } from "convex/react";
 import { useUser } from "@clerk/nextjs";
+import { Button } from "@/components/ui/button";
 
 export default function TestAuth() {
   const { user, isSignedIn } = useUser();
