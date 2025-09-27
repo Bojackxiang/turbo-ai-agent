@@ -15,8 +15,15 @@ export const useVapi = () => {
   const [transcript, setTranscript] = useState<TranscriptMessage[]>([]);
 
   useEffect(() => {
-    // TODO: Replace with your actual Vapi API key
-    const vapiInstance = new Vapi("4994bf13-e26d-4705-87a0-5419e99c1c39");
+    if (!process.env.NEXT_PUBLIC_VAPI_API_KEY) {
+      throw new Error("VAPI API key is not set");
+    }
+
+    if (!process.env.NEXT_PUBLIC_VAPI_AGENT_ID) {
+      throw new Error("VAPI Agent ID is not set");
+    }
+
+    const vapiInstance = new Vapi(process.env.NEXT_PUBLIC_VAPI_API_KEY || "");
     setVapi(vapiInstance);
 
     vapiInstance.on("call-start", () => {
@@ -66,8 +73,7 @@ export const useVapi = () => {
   const startCall = () => {
     setIsConnecting(true);
     if (vapi) {
-      // TODO: Replace with your actual session ID
-      vapi.start("649afb1a-3286-4f36-9bd6-8821e7c34b1b");
+      vapi.start(process.env.NEXT_PUBLIC_VAPI_AGENT_ID || "");
     }
   };
 
