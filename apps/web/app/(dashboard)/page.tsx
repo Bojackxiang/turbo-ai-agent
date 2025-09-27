@@ -1,9 +1,10 @@
 "use client";
 
-import { api } from "../../../packages/backend/convex/_generated/api";
+import { api } from "../../../../packages/backend/convex/_generated/api";
 import { Authenticated, Unauthenticated, useQuery } from "convex/react";
-import { UserButton } from "@clerk/nextjs";
+import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
 import Link from "next/link";
+import { Organization } from "@clerk/nextjs/server";
 
 const ThemeImage = () => {
   const users = useQuery(api.user.getMany);
@@ -37,7 +38,10 @@ export default function Home() {
             </div>
             <div className="flex items-center space-x-4">
               <Authenticated>
-                <Link href="/test" className="text-gray-600 hover:text-gray-900">
+                <Link
+                  href="/test"
+                  className="text-gray-600 hover:text-gray-900"
+                >
                   Test Page
                 </Link>
                 <Link
@@ -79,6 +83,7 @@ export default function Home() {
             </p>
           </div>
           <ThemeImage />
+          <OrganizationSwitcher hidePersonal={true} />
         </Authenticated>
         <Unauthenticated>
           <div className="text-center py-12">
