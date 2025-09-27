@@ -2,14 +2,12 @@
 
 import { api } from "../../../../packages/backend/convex/_generated/api";
 import { Authenticated, Unauthenticated, useQuery } from "convex/react";
-import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
+import { UserButton } from "@clerk/nextjs";
 import Link from "next/link";
-import { Organization } from "@clerk/nextjs/server";
 import OrgGuard from "../../modules/auth/ui/components/org-guard";
 
 const ThemeImage = () => {
   const users = useQuery(api.user.getMany);
-  console.log("users: ", users);
 
   return (
     <div className="flex flex-col items-center justify-center w-full p-4">

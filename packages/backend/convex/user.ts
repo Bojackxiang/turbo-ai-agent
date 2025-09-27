@@ -6,14 +6,17 @@ export const getMany = query({
   handler: async (ctx) => {
     const identity = await ctx.auth.getUserIdentity();
 
-    const orgId = identity?.orgId as string;
-    if (!orgId) {
-      throw new Error(`${orgId} is required`);
-    }
-
+    // Check authentication first
     if (identity === null) {
       throw new Error("user is not authed");
     }
+
+    // Then check organization ID
+    const orgId = identity.orgId as string;
+    if (!orgId) {
+      throw new Error("orgId is required");
+    }
+
     const users = await ctx.db.query("users").collect();
     return users;
   },

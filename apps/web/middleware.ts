@@ -30,7 +30,7 @@ export default clerkMiddleware(async (auth, req) => {
     const searchParams = new URLSearchParams({ redirectUrl: req.url });
 
     const orgSelection = new URL(
-      `/org-select?${searchParams.toString()}}`,
+      `/org-select?${searchParams.toString()}`,
       req.url
     );
 

@@ -1,5 +1,6 @@
+"use client";
+
 import { useOrganization } from "@clerk/nextjs";
-import React from "react";
 import { OrgSelectView } from "../views/org-select-view";
 
 /**
