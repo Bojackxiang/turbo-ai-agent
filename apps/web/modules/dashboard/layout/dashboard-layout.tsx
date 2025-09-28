@@ -11,7 +11,7 @@ const DashboardLayout = async ({ children }: React.PropsWithChildren) => {
   return (
     <>
       <OrgGuard>
-        <SidebarProvider defaultOpen>
+        <SidebarProvider defaultOpen={defaultOpen}>
           <AppSidebar />
           <main className="flex flex-1 flex-col">{children}</main>
         </SidebarProvider>

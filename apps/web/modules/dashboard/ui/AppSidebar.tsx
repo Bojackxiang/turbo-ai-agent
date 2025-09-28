@@ -12,6 +12,7 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
+import { cn } from "@/lib/utils";
 import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
 import {
   CreditCardIcon,
@@ -126,7 +127,7 @@ export const AppSidebar = () => {
                     asChild
                     tooltip={item.title}
                     isActive={isActive(item.url)}
-                    className="group-data-[collapsible=icon]:justify-center"
+                    className="group-data-[collapsible=icon]:justify-center "
                   >
                     <Link href={item.url}>
                       <item.icon className="size-4" />

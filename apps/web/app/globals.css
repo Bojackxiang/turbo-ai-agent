@@ -226,3 +226,65 @@ a {
     order: unset !important;
   }
 }
+
+/* 默认文字颜色（非激活状态） */
+[data-sidebar="menu-button"][data-active="false"] span {
+  color: #374151 !important;
+}
+
+/* Sidebar Menu Button 样式系统 */
+/* 默认状态 - 保持原有的 sidebar 样式 */
+[data-sidebar="menu-button"] {
+  transition: all 0.2s ease-in-out !important;
+}
+
+/* Active 状态 - 蓝色渐变背景 */
+[data-sidebar="menu-button"][data-active="true"] {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8) !important;
+  color: white !important;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3) !important;
+  border-radius: 8px !important;
+}
+
+/* Active 状态的文字颜色 */
+[data-sidebar="menu-button"][data-active="true"] span {
+  color: white !important;
+}
+
+/* Active 状态的图标颜色 */
+[data-sidebar="menu-button"][data-active="true"] svg {
+  color: white !important;
+}
+
+/* Active 状态的 hover 效果 */
+[data-sidebar="menu-button"][data-active="true"]:hover {
+  background: linear-gradient(135deg, #2563eb, #1e40af) !important;
+  box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* Inactive 状态 - 默认样式，hover 时轻微变化 */
+[data-sidebar="menu-button"][data-active="false"]:hover {
+  background: rgba(59, 130, 246, 0.1) !important;
+  color: #3b82f6 !important;
+}
+
+[data-sidebar="menu-button"][data-active="false"]:hover span {
+  color: #3b82f6 !important;
+}
+
+[data-sidebar="menu-button"][data-active="false"]:hover svg {
+  color: #3b82f6 !important;
+}
+
+/* 收起状态的特殊处理 */
+[data-collapsible="icon"] [data-sidebar="menu-button"][data-active="true"] {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8) !important;
+  border-radius: 8px !important;
+}
+
+/* 焦点状态 */
+[data-sidebar="menu-button"]:focus-visible {
+  outline: 2px solid #3b82f6 !important;
+  outline-offset: 2px !important;
+}
