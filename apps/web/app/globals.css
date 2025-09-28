@@ -100,3 +100,129 @@ a {
     @apply bg-background text-foreground;
   }
 }
+
+/* Custom sidebar collapsed state styles */
+@layer components {
+  /* Organization Switcher collapsed state */
+  [data-collapsible="icon"] .organization-switcher-container {
+    width: 2rem !important;
+    height: 2rem !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    overflow: hidden !important;
+  }
+
+  /* Hide text and icon when collapsed */
+  [data-collapsible="icon"]
+    .organization-switcher-container
+    [data-testid*="organization-preview-text"],
+  [data-collapsible="icon"]
+    .organization-switcher-container
+    [data-testid*="organization-switcher-trigger-icon"],
+  [data-collapsible="icon"]
+    .organization-switcher-container
+    .cl-organizationPreviewTextContainer,
+  [data-collapsible="icon"]
+    .organization-switcher-container
+    .cl-organizationSwitcherTriggerIcon {
+    display: none !important;
+  }
+
+  /* Ensure avatar is centered */
+  [data-collapsible="icon"] .organization-switcher-container .cl-avatarBox,
+  [data-collapsible="icon"]
+    .organization-switcher-container
+    [data-testid*="avatar"] {
+    margin: 0 auto !important;
+  }
+
+  /* User Button layout - Force avatar LEFT, name RIGHT */
+  .user-button-container {
+    width: 100% !important;
+    height: 2rem !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  /* Override Clerk's default layout with higher specificity */
+  .user-button-container .cl-userButtonTrigger,
+  .user-button-container [class*="cl-userButtonTrigger"] {
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 0.5rem !important;
+    padding: 0.25rem !important;
+  }
+
+  .user-button-container .cl-userPreview,
+  .user-button-container [class*="cl-userPreview"] {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 0.5rem !important;
+    width: 100% !important;
+  }
+
+  /* Force avatar to be FIRST (left side) with extreme specificity */
+  .user-button-container .cl-avatarBox,
+  .user-button-container .cl-userButtonAvatarBox,
+  .user-button-container [class*="cl-avatar"] {
+    width: 1.25rem !important; /* Increased to 1.25rem (20px) */
+    height: 1.25rem !important; /* Increased to 1.25rem (20px) */
+    flex-shrink: 0 !important;
+    order: -999 !important; /* Extremely negative order */
+    margin: 0 !important;
+    position: relative !important;
+  }
+
+  /* Force username to be SECOND (right side) */
+  .user-button-container .cl-userPreviewTextContainer,
+  .user-button-container .cl-userButtonUsername,
+  .user-button-container [class*="userPreview"] span,
+  .user-button-container [class*="userButton"] span:not([class*="avatar"]) {
+    font-size: 1rem !important;
+    font-weight: 500 !important;
+    color: hsl(var(--sidebar-foreground)) !important;
+    order: 999 !important; /* Extremely positive order */
+    flex: 1 !important;
+    text-align: left !important;
+    margin: 0 !important;
+  }
+
+  /* Collapsed state */
+  [data-collapsible="icon"] .user-button-container {
+    width: 2rem !important;
+    height: 2rem !important;
+    justify-content: center !important;
+    overflow: hidden !important;
+  }
+
+  /* Hide text when collapsed */
+  [data-collapsible="icon"] .user-button-container .cl-userPreviewTextContainer,
+  [data-collapsible="icon"] .user-button-container .cl-userButtonUsername,
+  [data-collapsible="icon"] .user-button-container [class*="userPreview"] span,
+  [data-collapsible="icon"]
+    .user-button-container
+    [class*="userButton"]
+    span:not([class*="avatar"]) {
+    display: none !important;
+  }
+
+  /* Center avatar when collapsed */
+  [data-collapsible="icon"] .user-button-container .cl-userButtonTrigger,
+  [data-collapsible="icon"] .user-button-container .cl-userPreview {
+    justify-content: center !important;
+    width: 2rem !important;
+    height: 2rem !important;
+  }
+
+  [data-collapsible="icon"] .user-button-container .cl-avatarBox,
+  [data-collapsible="icon"] .user-button-container .cl-userButtonAvatarBox {
+    margin: 0 auto !important;
+    order: unset !important;
+  }
+}
