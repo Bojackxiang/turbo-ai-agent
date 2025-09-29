@@ -10,9 +10,8 @@ interface Props {
 export const WidgetView = ({ orgId }: Props) => {
   return (
     <div className="flex h-screen w-full flex-col bg-background text-foreground">
-      <WidgetHeader>Widget Application - {orgId}</WidgetHeader>
+      <WidgetHeader>How we can help you today!</WidgetHeader>
 
-      {/* Main Content - 占满中间剩余空间，可滚动 */}
       <main className="flex-1 overflow-auto p-6 space-y-6">
         <div className="bg-primary text-primary-foreground p-6 rounded-lg shadow-lg">
           <h1 className="text-2xl font-bold mb-2">Widget Application</h1>
@@ -38,7 +37,6 @@ export const WidgetView = ({ orgId }: Props) => {
           </p>
         </div>
 
-        {/* 额外的内容区域，展示滚动效果 */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="bg-card text-card-foreground p-4 rounded-lg border">
             <h5 className="font-semibold mb-2">Card 1</h5>
@@ -50,7 +48,6 @@ export const WidgetView = ({ orgId }: Props) => {
           </div>
         </div>
 
-        {/* 更多内容用于演示滚动 */}
         {Array.from({ length: 5 }, (_, i) => (
           <div key={i} className="bg-muted/50 p-4 rounded-lg">
             <p className="text-sm">
@@ -61,7 +58,6 @@ export const WidgetView = ({ orgId }: Props) => {
         ))}
       </main>
 
-      {/* Footer - 固定在底部 */}
       <WidgetFooter />
     </div>
   );
