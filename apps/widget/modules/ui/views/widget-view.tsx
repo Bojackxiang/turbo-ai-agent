@@ -10,7 +10,6 @@ interface Props {
 export const WidgetView = ({ orgId }: Props) => {
   return (
     <div className="flex h-screen w-full flex-col bg-background text-foreground">
-      {/* Header - 固定在顶部 */}
       <WidgetHeader>Widget Application - {orgId}</WidgetHeader>
 
       {/* Main Content - 占满中间剩余空间，可滚动 */}

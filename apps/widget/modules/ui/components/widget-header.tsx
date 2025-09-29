@@ -3,7 +3,7 @@ const WidgetHeader = ({
   className,
 }: React.PropsWithChildren & { className?: string }) => {
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-primary text-primary-foreground shadow-sm">
+    <header className="sticky top-0 z-50 w-full border-b bg-primary text-primary-foreground shadow-sm bg-blue-600 text-white">
       <div className="flex h-16 items-center px-6">
         <h1 className="text-lg font-semibold">{children}</h1>
       </div>
