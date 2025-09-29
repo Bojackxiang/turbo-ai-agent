@@ -22,5 +22,7 @@ export default function Page({ searchParams }: Props) {
     endCall,
   } = useVapi();
 
-  return <WidgetView orgId={orgId} />;
+
+  return <WidgetView />;
+
 }
