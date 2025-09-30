@@ -2,7 +2,7 @@
 
 import { useSearchParams } from "next/navigation";
 import WidgetHeader from "../components/widget-header";
-import WidgetLoadingMessageView from "../views/widget-loading-message-view copy";
+import WidgetLoadingMessageView from "../views/widget-loading-message-view";
 
 const WidgetLoadingScreen = () => {
   const searchParams = useSearchParams();

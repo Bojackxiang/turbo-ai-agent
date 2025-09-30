@@ -10,7 +10,6 @@ import {
 } from "@/modules/atoms/widget-atoms";
 import { useAction, useMutation } from "convex/react";
 import { api } from "@repo/backend/convex/_generated/api";
-import { Id } from "@repo/backend/convex/_generated/dataModel";
 
 interface WidgetLoadingMessageViewProps {
   message?: string;
@@ -39,10 +38,12 @@ const WidgetLoadingMessageView = ({
   const loadingMessage = useAtomValue(loadingMessageAtom);
   const setLoadingMessage = useSetAtom(loadingMessageAtom);
   const setErrorMessage = useSetAtom(errorMessageAtom);
-  const organizationId = useAtom(organizationIdAtom);
-  const setOrganizationId = useSetAtom(organizationIdAtom);
+  const [organizationId, setOrganizationId] = useAtom(organizationIdAtom);
+
+  // 🔥 修复：使用统一的 orgId 来源
+  const effectiveOrgId = organizationId || orgId;
   const contactSessionId = useAtomValue(
-    contactSessionIdAtomFamily(orgId || "")
+    contactSessionIdAtomFamily(effectiveOrgId || "")
   );
   const setScreen = useSetAtom(screenAtom);
 
@@ -104,12 +105,14 @@ const WidgetLoadingMessageView = ({
     }
 
     setLoadingMessage("Finding Contact Session ID...");
+
     if (!contactSessionId) {
       setSessionValid(false);
       setStep("done");
       return;
     }
 
+    setLoadingMessage("validating Contact Session ID...");
     contactSessionValidation({
       contactSessionId: contactSessionId,
     })
@@ -137,10 +140,9 @@ const WidgetLoadingMessageView = ({
     }
 
     const hasValidSession = sessionValid && contactSessionId;
-    console.log("contactSessionId: ", contactSessionId);
-    console.log("sessionValid: ", sessionValid);
+
     setScreen(hasValidSession ? "selection" : "auth");
-  }, [step, sessionValid, sessionValid, setScreen]);
+  }, [step, sessionValid, setScreen, contactSessionId]);
 
   const getLoadingStyling = (type: string) => {
     switch (type) {

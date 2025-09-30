@@ -8,7 +8,7 @@ import { useMutation } from "convex/react";
 import { api } from "@repo/backend/convex/_generated/api";
 import { useSearchParams } from "next/navigation";
 import { Doc } from "@repo/backend/convex/_generated/dataModel";
-import { useAtomValue, useSetAtom } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import {
   contactSessionIdAtomFamily,
   organizationIdAtom,
@@ -32,12 +32,12 @@ type FormData = z.infer<typeof formSchema>;
 
 const WidgetAuthFormView = () => {
   const orgId = useAtomValue(organizationIdAtom);
+
   const setContactSessionid = useSetAtom(
     contactSessionIdAtomFamily(orgId || "")
   );
 
   // TODO: 处理真实的 orgId
-  // const orgId = searchParams.get("orgId");
 
   // Convex mutation hook
   const createConvexSession = useMutation(api.public.contact_session.create);
@@ -77,7 +77,7 @@ const WidgetAuthFormView = () => {
         name: data.name,
         email: data.email,
         orgId: orgId!,
-        expiredAt: Date.now() + 24 * 60 * 60 * 1000,
+        // 移除 expiredAt，让服务端完全控制过期时间
         metadata: metadata,
       });
 
