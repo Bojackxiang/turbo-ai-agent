@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 
 interface WidgetErrorMessageViewProps {
-  message?: string;
+  message: string | null;
   title?: string;
   errorCode?: string;
   errorType?: "network" | "server" | "client" | "unknown";

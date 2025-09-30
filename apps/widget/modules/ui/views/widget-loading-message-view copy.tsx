@@ -1,5 +1,16 @@
-import React from "react";
+import React, { use, useEffect, useState } from "react";
 import { Loader2, Sparkles, Zap, Wifi } from "lucide-react";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import {
+  contactSessionIdAtomFamily,
+  errorMessageAtom,
+  loadingMessageAtom,
+  organizationIdAtom,
+  screenAtom,
+} from "@/modules/atoms/widget-atoms";
+import { useAction, useMutation } from "convex/react";
+import { api } from "@repo/backend/convex/_generated/api";
+import { Id } from "@repo/backend/convex/_generated/dataModel";
 
 interface WidgetLoadingMessageViewProps {
   message?: string;
@@ -8,7 +19,10 @@ interface WidgetLoadingMessageViewProps {
   showProgress?: boolean;
   progress?: number; // 0-100
   className?: string;
+  orgId: string | null | undefined;
 }
+
+type InitSteps = "org" | "session" | "settings" | "vapi" | "done";
 
 const WidgetLoadingMessageView = ({
   message = "Please wait while we load your content...",
@@ -17,8 +31,115 @@ const WidgetLoadingMessageView = ({
   showProgress = false,
   progress = 0,
   className = "",
+  orgId,
 }: WidgetLoadingMessageViewProps) => {
-  // Get loading-specific styling and icons
+  const [step, setStep] = useState<InitSteps>("org");
+  const [sessionValid, setSessionValid] = useState<boolean>(false);
+  // atom
+  const loadingMessage = useAtomValue(loadingMessageAtom);
+  const setLoadingMessage = useSetAtom(loadingMessageAtom);
+  const setErrorMessage = useSetAtom(errorMessageAtom);
+  const organizationId = useAtom(organizationIdAtom);
+  const setOrganizationId = useSetAtom(organizationIdAtom);
+  const contactSessionid = useAtomValue(
+    contactSessionIdAtomFamily(orgId || "")
+  );
+  const setScreen = useSetAtom(screenAtom);
+
+  // step 1 validate org
+  const orgValidation = useAction(api.public.organization.validate);
+  useEffect(() => {
+    if (step !== "org") {
+      return;
+    }
+
+    if (!orgId) {
+      setErrorMessage("No organization id provided");
+      setScreen("error");
+      return;
+    }
+
+    setLoadingMessage("Validating organization...");
+
+    orgValidation({ orgId })
+      .then((res) => {
+        if (res.valid) {
+          setOrganizationId(orgId);
+          setStep("session");
+        } else {
+          setErrorMessage(
+            res.reason || "Unknown error for organization validation"
+          );
+          setScreen("error");
+        }
+      })
+      .catch((err: unknown) => {
+        setErrorMessage(
+          err instanceof Error ? err.message : "An unknown error occurred"
+        );
+        setScreen("error");
+      });
+
+    setLoadingMessage("Validating organization...");
+  }, [
+    step,
+    orgId,
+    setErrorMessage,
+    setScreen,
+    loadingMessage,
+    orgValidation,
+    setLoadingMessage,
+    setOrganizationId,
+    setStep,
+    organizationId,
+  ]);
+
+  // step 2 validate session
+  const contactSessionValidation = useMutation(
+    api.public.contact_session.validation
+  );
+  useEffect(() => {
+    if (step !== "session") {
+      return;
+    }
+
+    setLoadingMessage("Finding Contact Session ID...");
+    if (!contactSessionid) {
+      setSessionValid(false);
+      setStep("done");
+      return;
+    }
+
+    contactSessionValidation({
+      contactSessionId: contactSessionid as Id<"contactSession">,
+    })
+      .then((res) => {
+        if (res.valid) {
+          setSessionValid(true);
+          setStep("done");
+        } else {
+          setSessionValid(false);
+          setStep("done");
+        }
+      })
+      .catch((err: unknown) => {
+        setErrorMessage(
+          err instanceof Error ? err.message : "An unknown error occurred"
+        );
+        setScreen("error");
+      });
+  }, [step, setLoadingMessage, contactSessionid, contactSessionValidation]);
+
+  // step3
+  useEffect(() => {
+    if (step !== "done") {
+      return;
+    }
+
+    const hasValidSession = sessionValid && sessionValid;
+    setScreen(hasValidSession ? "selection" : "auth");
+  }, [step, sessionValid, sessionValid, setScreen]);
+
   const getLoadingStyling = (type: string) => {
     switch (type) {
       case "network":
@@ -113,7 +234,7 @@ const WidgetLoadingMessageView = ({
 
           {/* Message with improved readability */}
           <p className="text-gray-600 text-base leading-relaxed max-w-sm mx-auto">
-            {message}
+            {loadingMessage || message}
           </p>
         </div>
 

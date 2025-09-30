@@ -13,7 +13,7 @@ const WIdgetErrorScreen = () => {
     <div className="flex h-screen w-full flex-col bg-background text-foreground">
       <WidgetHeader>Error!</WidgetHeader>
       <main className="flex-1 overflow-auto ">
-        <WidgetErrorMessageView message="something is wrong" />
+        <WidgetErrorMessageView message={errorMessage} />
       </main>
     </div>
   );

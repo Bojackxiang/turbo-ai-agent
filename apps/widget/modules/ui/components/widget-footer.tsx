@@ -9,12 +9,10 @@ const WidgetFooter = () => {
 
   const handleHomeClick = () => {
     setActiveTab("home");
-    console.log("Home button clicked");
   };
 
   const handleInboxClick = () => {
     setActiveTab("inbox");
-    console.log("Inbox button clicked");
   };
 
   return (
