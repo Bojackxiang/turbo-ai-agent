@@ -41,7 +41,7 @@ const WidgetLoadingMessageView = ({
   const setErrorMessage = useSetAtom(errorMessageAtom);
   const organizationId = useAtom(organizationIdAtom);
   const setOrganizationId = useSetAtom(organizationIdAtom);
-  const contactSessionid = useAtomValue(
+  const contactSessionId = useAtomValue(
     contactSessionIdAtomFamily(orgId || "")
   );
   const setScreen = useSetAtom(screenAtom);
@@ -104,14 +104,14 @@ const WidgetLoadingMessageView = ({
     }
 
     setLoadingMessage("Finding Contact Session ID...");
-    if (!contactSessionid) {
+    if (!contactSessionId) {
       setSessionValid(false);
       setStep("done");
       return;
     }
 
     contactSessionValidation({
-      contactSessionId: contactSessionid as Id<"contactSession">,
+      contactSessionId: contactSessionId,
     })
       .then((res) => {
         if (res.valid) {
@@ -128,7 +128,7 @@ const WidgetLoadingMessageView = ({
         );
         setScreen("error");
       });
-  }, [step, setLoadingMessage, contactSessionid, contactSessionValidation]);
+  }, [step, setLoadingMessage, contactSessionId, contactSessionValidation]);
 
   // step3
   useEffect(() => {
@@ -136,7 +136,9 @@ const WidgetLoadingMessageView = ({
       return;
     }
 
-    const hasValidSession = sessionValid && sessionValid;
+    const hasValidSession = sessionValid && contactSessionId;
+    console.log("contactSessionId: ", contactSessionId);
+    console.log("sessionValid: ", sessionValid);
     setScreen(hasValidSession ? "selection" : "auth");
   }, [step, sessionValid, sessionValid, setScreen]);
 
