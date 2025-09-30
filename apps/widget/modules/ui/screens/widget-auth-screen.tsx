@@ -2,7 +2,7 @@
 
 import React from "react";
 import WidgetHeader from "../components/widget-header";
-import WidgetAuthFormView from "./widget-auth-form-view";
+import WidgetAuthFormView from "../views/widget-auth-form-view";
 
 const WidgetAuthScreen = () => {
   return (
