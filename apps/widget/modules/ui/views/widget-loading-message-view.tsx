@@ -40,7 +40,6 @@ const WidgetLoadingMessageView = ({
   const setErrorMessage = useSetAtom(errorMessageAtom);
   const [organizationId, setOrganizationId] = useAtom(organizationIdAtom);
 
-  // 🔥 修复：使用统一的 orgId 来源
   const effectiveOrgId = organizationId || orgId;
   const contactSessionId = useAtomValue(
     contactSessionIdAtomFamily(effectiveOrgId || "")

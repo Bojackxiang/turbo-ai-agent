@@ -77,7 +77,6 @@ const WidgetAuthFormView = () => {
         name: data.name,
         email: data.email,
         orgId: orgId!,
-        // 移除 expiredAt，让服务端完全控制过期时间
         metadata: metadata,
       });
 
