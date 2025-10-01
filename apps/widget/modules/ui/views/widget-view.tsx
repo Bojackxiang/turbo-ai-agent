@@ -5,13 +5,15 @@ import WidgetFooter from "../components/widget-footer";
 import WidgetHeader from "../components/widget-header";
 
 import { screenAtom } from "@/modules/atoms/widget-atoms";
-import WidgetAuthScreen from "./widget-auth-screen";
+import WidgetAuthScreen from "../screens/widget-auth-screen";
+import WIdgetErrorScreen from "../screens/widget-error-screen";
+import WidgetLoadingScreen from "../screens/widget-loading-screen";
 
 export const WidgetView = () => {
   const screen = useAtomValue(screenAtom);
   const screenComponents = {
-    error: <>error</>,
-    loading: <>loading</>,
+    error: <WIdgetErrorScreen />,
+    loading: <WidgetLoadingScreen />,
     selection: <>selection</>,
     voice: <>voice</>,
     auth: <WidgetAuthScreen />,
@@ -23,7 +25,6 @@ export const WidgetView = () => {
   return (
     <div className="flex h-screen w-full flex-col bg-background text-foreground">
       {screenComponents[screen]}
-      <WidgetFooter />
     </div>
   );
 };

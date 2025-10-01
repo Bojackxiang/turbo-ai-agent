@@ -1,5 +1,19 @@
 import { atom } from "jotai";
 import { WidgetScreen } from "../types";
+import { atomFamily, atomWithStorage } from "jotai/utils";
+import { CONTACT_SESSION_KEY } from "@/constants";
+import { Id } from "@repo/backend/convex/_generated/dataModel";
 
 // NOTE: default to "auth" to force auth screen for demo
 export const screenAtom = atom<WidgetScreen>("loading");
+
+export const errorMessageAtom = atom<string | null>(null);
+export const loadingMessageAtom = atom<string | null>(null);
+export const organizationIdAtom = atom<string | null>(null);
+
+export const contactSessionIdAtomFamily = atomFamily((orgId: string) =>
+  atomWithStorage<Id<"contactSession"> | null>(
+    `${CONTACT_SESSION_KEY}_${orgId}`,
+    null
+  )
+);

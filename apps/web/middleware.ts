@@ -22,7 +22,6 @@ export default clerkMiddleware(async (auth, req) => {
   const { userId, orgId } = await auth();
 
   if (!isPublicRoute(req)) {
-    console.log("Protected route, checking auth...");
     await auth.protect();
   }
 

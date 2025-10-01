@@ -9,7 +9,6 @@ import { OrgSelectView } from "../views/org-select-view";
 const OrgGuard = ({ children }: React.PropsWithChildren) => {
   const { organization } = useOrganization();
   const orgId = organization?.id;
-  console.log("orgId: ", orgId);
 
   if (!orgId) {
     return (
