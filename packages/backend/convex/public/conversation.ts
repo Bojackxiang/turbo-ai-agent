@@ -1,6 +1,7 @@
 import { useMutation } from "convex/react";
 import { mutation, query } from "../_generated/server";
 import { ConvexError, v } from "convex/values";
+import { supportAgent } from "../system/ai/support_agent";
 
 export const create = mutation({
   args: {
@@ -16,7 +17,9 @@ export const create = mutation({
       });
     }
 
-    const threadId = crypto.randomUUID();
+    const { threadId } = await supportAgent.createThread(ctx, {
+      userId: args.orgId,
+    });
 
     const conversationId = await ctx.db.insert("conversation", {
       contactSessionId: args.contactSessionId,
