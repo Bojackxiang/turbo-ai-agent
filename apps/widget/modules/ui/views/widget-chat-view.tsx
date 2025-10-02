@@ -9,7 +9,8 @@ import { useAction, useQuery } from "convex/react";
 import { api } from "@repo/backend/convex/_generated/api";
 import { contactSessionIdAtomFamily } from "../../atoms/widget-atoms";
 import { useThreadMessages, toUIMessages } from "@convex-dev/agent/react";
-import { ChatInput } from "../components/widger-messaage-input";
+import { WidgetMessageInput } from "../components/widger-message-input";
+import { AIConversationList } from "../components/ai-conversation-list";
 
 export const WidgetChatView = ({}) => {
   const conversationId = useAtomValue(conversationIdAtom);
@@ -36,6 +37,8 @@ export const WidgetChatView = ({}) => {
     { initialNumItems: 10 }
   );
 
+  console.log(conversation);
+
   const createMessage = useAction(api.public.message.create);
 
   const handleSendMessage = async (messageContent: string) => {
@@ -55,20 +58,29 @@ export const WidgetChatView = ({}) => {
     }
   };
 
-  const isDisabled = !conversationId || !contactSessionId || !conversation;
+  const isDisabled =
+    !conversationId ||
+    !contactSessionId ||
+    !conversation ||
+    conversation.status === "resolved";
 
   return (
     <div className="h-full flex flex-col">
       {/* Messages area */}
-      <div className="flex-1 overflow-auto p-4">
-        <div className="bg-red-300 p-4 overflow-wrap-anywhere whitespace-pre-wrap rounded-lg">
-          {JSON.stringify(messages, null, 2)}
-        </div>
+      <div className="flex-1 overflow-auto">
+        <AIConversationList
+          data={messages}
+          resolvedMessage={
+            conversation?.status === "resolved"
+              ? "The conversation is already resolved"
+              : undefined
+          }
+        />
       </div>
 
       {/* Chat input - Fixed at bottom */}
       <div className="shrink-0">
-        <ChatInput
+        <WidgetMessageInput
           onSubmit={handleSendMessage}
           disabled={isDisabled}
           placeholder={

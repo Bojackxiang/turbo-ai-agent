@@ -26,7 +26,7 @@ interface ChatInputProps {
   className?: string;
 }
 
-export const ChatInput = ({
+export const WidgetMessageInput = ({
   onSubmit,
   disabled = false,
   placeholder = "Type your message...",
