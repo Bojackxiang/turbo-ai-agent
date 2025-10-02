@@ -13,11 +13,6 @@ import type {
   FilterApi,
   FunctionReference,
 } from "convex/server";
-import type * as migration from "../migration.js";
-import type * as public_contact_session from "../public/contact_session.js";
-import type * as public_conversation from "../public/conversation.js";
-import type * as public_organization from "../public/organization.js";
-import type * as user from "../user.js";
 
 /**
  * A utility for referencing Convex functions in your app's API.
@@ -27,13 +22,7 @@ import type * as user from "../user.js";
  * const myFunctionReference = api.myModule.myFunction;
  * ```
  */
-declare const fullApi: ApiFromModules<{
-  migration: typeof migration;
-  "public/contact_session": typeof public_contact_session;
-  "public/conversation": typeof public_conversation;
-  "public/organization": typeof public_organization;
-  user: typeof user;
-}>;
+declare const fullApi: ApiFromModules<{}>;
 export declare const api: FilterApi<
   typeof fullApi,
   FunctionReference<any, "public">

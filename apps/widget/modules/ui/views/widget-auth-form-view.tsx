@@ -33,7 +33,7 @@ type FormData = z.infer<typeof formSchema>;
 const WidgetAuthFormView = () => {
   const orgId = useAtomValue(organizationIdAtom);
 
-  const setContactSessionid = useSetAtom(
+  const setContactSessionId = useSetAtom(
     contactSessionIdAtomFamily(orgId || "")
   );
 
@@ -80,7 +80,7 @@ const WidgetAuthFormView = () => {
         metadata: metadata,
       });
 
-      setContactSessionid(contactSessionId);
+      setContactSessionId(contactSessionId);
 
       reset(); // 清空表单
     } catch (error) {

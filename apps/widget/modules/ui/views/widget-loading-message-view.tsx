@@ -139,6 +139,7 @@ const WidgetLoadingMessageView = ({
     }
 
     const hasValidSession = sessionValid && contactSessionId;
+    console.log("hasValidSession: ", hasValidSession);
 
     setScreen(hasValidSession ? "selection" : "auth");
   }, [step, sessionValid, setScreen, contactSessionId]);
