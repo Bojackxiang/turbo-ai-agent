@@ -45,8 +45,16 @@ export const getOne = query({
     }
 
     const conversation = await ctx.db.get(args.conversationId);
+
     if (!conversation) {
       return null;
+    }
+
+    if (conversation.contactSessionId !== session._id) {
+      throw new ConvexError({
+        message: "Conversation does not belong to the contact session",
+        code: "UNAUTHENTICATED",
+      });
     }
 
     return conversation;
