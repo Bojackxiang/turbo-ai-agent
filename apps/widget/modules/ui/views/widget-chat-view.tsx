@@ -8,7 +8,7 @@ import {
 import { useAction, useQuery } from "convex/react";
 import { api } from "@repo/backend/convex/_generated/api";
 import { contactSessionIdAtomFamily } from "../../atoms/widget-atoms";
-import { useThreadMessages, toUIMessages } from "@convex-dev/agent/react";
+import { useThreadMessages } from "@convex-dev/agent/react";
 import { WidgetMessageInput } from "../components/widger-message-input";
 import { AIConversationList } from "../components/ai-conversation-list";
 
