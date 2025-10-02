@@ -4,7 +4,7 @@ import { components } from "../../_generated/api";
 
 // Ensure components.agent has all required properties for Agent constructor
 export const supportAgent = new Agent(components.agent, {
-  chat: google("gemini-1.5-flash"),
+  chat: google("gemini-2.0-flash"),
   name: "Customer Support Agent",
   instructions:
     "You are a helpful customer support agent. Always be polite and try to solve customer problems efficiently.",

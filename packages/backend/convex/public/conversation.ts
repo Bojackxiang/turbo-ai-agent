@@ -2,6 +2,8 @@ import { useMutation } from "convex/react";
 import { mutation, query } from "../_generated/server";
 import { ConvexError, v } from "convex/values";
 import { supportAgent } from "../system/ai/support_agent";
+import { saveMessage } from "@convex-dev/agent";
+import { components } from "../_generated/api";
 
 export const create = mutation({
   args: {
@@ -19,6 +21,14 @@ export const create = mutation({
 
     const { threadId } = await supportAgent.createThread(ctx, {
       userId: args.orgId,
+    });
+
+    await saveMessage(ctx, components.agent, {
+      threadId,
+      message: {
+        role: "assistant",
+        content: "Hello! How can we help you today? ",
+      },
     });
 
     const conversationId = await ctx.db.insert("conversation", {
