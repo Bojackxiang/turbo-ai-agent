@@ -30,7 +30,7 @@ interface UseAutoScrollReturn {
   /**
    * 滚动容器的ref
    */
-  scrollRef: React.RefObject<HTMLDivElement>;
+  scrollRef: { current: HTMLDivElement | null };
 
   /**
    * 手动滚动到底部
@@ -74,7 +74,7 @@ export function useAutoScroll(
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const isUserScrollingRef = useRef(false);
-  const scrollTimeoutRef = useRef<number>();
+  const scrollTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
 
   const scrollToBottom = () => {
     const element = scrollRef.current;
