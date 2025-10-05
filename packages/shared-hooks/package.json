@@ -1,0 +1,30 @@
+{
+  "name": "@repo/shared-hooks",
+  "type": "module",
+  "scripts": {
+    "dev": "tsc --watch",
+    "build": "tsc"
+  },
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./dist/index.js"
+    },
+    "./use-infinite-scroll": {
+      "types": "./src/use-infinite-scroll.ts",
+      "default": "./dist/use-infinite-scroll.js"
+    },
+    "./use-local-storage": {
+      "types": "./src/use-local-storage.ts",
+      "default": "./dist/use-local-storage.js"
+    }
+  },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "@types/react": "^18.0.0",
+    "typescript": "latest"
+  }
+}
