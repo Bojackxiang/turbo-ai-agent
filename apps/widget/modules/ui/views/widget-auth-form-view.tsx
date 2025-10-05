@@ -12,6 +12,7 @@ import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import {
   contactSessionIdAtomFamily,
   organizationIdAtom,
+  screenAtom,
 } from "@/modules/atoms/widget-atoms";
 
 // Zod schema for form validation
@@ -32,6 +33,7 @@ type FormData = z.infer<typeof formSchema>;
 
 const WidgetAuthFormView = () => {
   const orgId = useAtomValue(organizationIdAtom);
+  const setScreen = useSetAtom(screenAtom);
 
   const setContactSessionId = useSetAtom(
     contactSessionIdAtomFamily(orgId || "")
@@ -81,6 +83,7 @@ const WidgetAuthFormView = () => {
       });
 
       setContactSessionId(contactSessionId);
+      setScreen("selection");
 
       reset(); // 清空表单
     } catch (error) {

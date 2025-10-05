@@ -9,9 +9,6 @@ const WidgetLoadingScreen = () => {
   const searchParams = useSearchParams();
   const orgId = searchParams.get("orgId");
 
-  const { data } = useInfiniteScroll();
-  console.log("data: ", data);
-
   return (
     <div className="flex h-screen w-full flex-col bg-background text-foreground">
       <WidgetHeader>Error!</WidgetHeader>
