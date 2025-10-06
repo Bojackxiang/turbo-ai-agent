@@ -226,27 +226,6 @@ const WidgetSelectionView = () => {
             );
           })}
         </div>
-
-        {/* Footer Info */}
-        <div className="text-center mt-8">
-          <p
-            className={`text-sm transition-colors duration-300
-                        ${pending ? "text-gray-400" : "text-gray-500"}`}
-          >
-            All options are available 24/7
-          </p>
-
-          {/* Debug: Test pending state */}
-          {process.env.NODE_ENV === "development" && (
-            <button
-              onClick={() => setPending(!pending)}
-              className="mt-4 px-4 py-2 text-xs bg-gray-200 hover:bg-gray-300
-                       rounded-lg transition-colors duration-200"
-            >
-              Toggle Pending State (Debug)
-            </button>
-          )}
-        </div>
       </div>
     </div>
   );

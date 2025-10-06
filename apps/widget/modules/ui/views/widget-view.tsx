@@ -10,6 +10,7 @@ import WIdgetErrorScreen from "../screens/widget-error-screen";
 import WidgetLoadingScreen from "../screens/widget-loading-screen";
 import WidgetSelectionScreen from "../screens/widget-selection-screen";
 import WidgetChatScreen from "../screens/widget-chat-screen";
+import WidgetInboxScreen from "../screens/widget-inbox-screen";
 
 export const WidgetView = () => {
   const screen = useAtomValue(screenAtom);
@@ -19,7 +20,7 @@ export const WidgetView = () => {
     selection: <WidgetSelectionScreen />,
     voice: <>voice</>,
     auth: <WidgetAuthScreen />,
-    inbox: <>inbox</>,
+    inbox: <WidgetInboxScreen />,
     chat: <WidgetChatScreen />,
     contact: <>contact</>,
   };

@@ -1,18 +1,31 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { HomeIcon, InboxIcon } from "lucide-react";
 import TabButton from "./tab-button";
+import { useAtomValue, useSetAtom } from "jotai";
+import { screenAtom } from "@/modules/atoms/widget-atoms";
 
-type TabType = "home" | "inbox";
+type TabType = "inbox" | "selection";
 
 const WidgetFooter = () => {
+  const screen = useAtomValue(screenAtom);
+  const setScreen = useSetAtom(screenAtom);
+
   const [activeTab, setActiveTab] = useState<TabType>("inbox");
 
+  useEffect(() => {
+    if (screen === "inbox") {
+      setActiveTab("inbox");
+    } else {
+      setActiveTab("selection");
+    }
+  }, []);
+
   const handleHomeClick = () => {
-    setActiveTab("home");
+    setActiveTab("selection");
   };
 
   const handleInboxClick = () => {
-    setActiveTab("inbox");
+    setScreen("inbox");
   };
 
   return (
@@ -23,8 +36,8 @@ const WidgetFooter = () => {
       <div className="flex h-22 px-3 py-3 safe-area-inset-bottom">
         <TabButton
           icon={HomeIcon}
-          label="Home"
-          isActive={activeTab === "home"}
+          label="selection"
+          isActive={activeTab === "selection"}
           onClick={handleHomeClick}
         />
 

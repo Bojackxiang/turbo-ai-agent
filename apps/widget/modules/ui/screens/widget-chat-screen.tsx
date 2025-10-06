@@ -5,6 +5,8 @@ import WidgetHeader from "../components/widget-header";
 import { WidgetChatView } from "../views/widget-chat-view";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, MenuIcon } from "lucide-react";
+import { useSetAtom } from "jotai";
+import { screenAtom } from "@/modules/atoms/widget-atoms";
 
 // ==================== Main Component ====================
 
@@ -22,14 +24,10 @@ const WidgetChatScreen = () => {
 export default WidgetChatScreen;
 
 // ==================== Local Components ====================
-
-/**
- * Header component specifically for the chat screen
- */
 const ChatScreenHeader = () => {
+  const setScreen = useSetAtom(screenAtom);
   const handleGoBack = () => {
-    // TODO: 实现返回逻辑
-    console.log("Go back");
+    setScreen("inbox");
   };
 
   const handleMenuClick = () => {
@@ -57,7 +55,7 @@ const ChatScreenHeader = () => {
             variant="ghost"
             size="icon"
             onClick={handleMenuClick}
-            aria-label="菜单"
+            aria-label="menu"
           >
             <MenuIcon />
           </Button>

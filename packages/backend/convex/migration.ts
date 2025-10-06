@@ -14,9 +14,6 @@ export const fixConversationSchema = mutation({
         (conversation as any).contactSessionid &&
         !conversation.contactSessionId
       ) {
-        console.log(`Fixing conversation ${conversation._id}`);
-
-        // Update the document with the correct field name
         await ctx.db.patch(conversation._id, {
           contactSessionId: (conversation as any).contactSessionid,
         });

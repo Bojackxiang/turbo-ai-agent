@@ -12,6 +12,7 @@ const WidgetSelectionScreen = () => {
       <main className="flex-1 overflow-auto ">
         <WidgetSelectionView />
       </main>
+      <WidgetFooter />
     </div>
   );
 };
