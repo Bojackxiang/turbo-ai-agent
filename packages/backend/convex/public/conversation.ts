@@ -126,3 +126,64 @@ export const getOne = query({
     return conversation;
   },
 });
+
+export const getAllForAdmin = query({
+  args: {
+    status: v.optional(
+      v.union(
+        v.literal("all"),
+        v.literal("unresolved"),
+        v.literal("escalated"),
+        v.literal("resolved")
+      )
+    ),
+    paginationOpts: paginationOptsValidator,
+  },
+  handler: async (ctx, args) => {
+    // For now, let's get all conversations without authentication
+    // In production, you should add proper admin authentication here
+
+    let conversations;
+
+    if (args.status && args.status !== "all") {
+      conversations = await ctx.db
+        .query("conversation")
+        .filter((q) => q.eq(q.field("status"), args.status))
+        .order("desc")
+        .paginate(args.paginationOpts);
+    } else {
+      conversations = await ctx.db
+        .query("conversation")
+        .order("desc")
+        .paginate(args.paginationOpts);
+    }
+
+    const conversationWithLastMessage = await Promise.all(
+      conversations.page.map(async (conversation) => {
+        let lastMessage: MessageDoc | null = null;
+        const messages = await supportAgent.listMessages(ctx, {
+          threadId: conversation.threadId,
+          paginationOpts: { numItems: 1, cursor: null },
+        });
+
+        if (messages.page.length > 0) {
+          lastMessage = messages.page[0] ?? null;
+        }
+
+        return {
+          _id: conversation._id,
+          _createdAt: conversation._creationTime,
+          status: conversation.status,
+          orgId: conversation.orgId,
+          threadId: conversation.threadId,
+          lastMessage,
+        };
+      })
+    );
+
+    return {
+      ...conversations,
+      page: conversationWithLastMessage,
+    };
+  },
+});

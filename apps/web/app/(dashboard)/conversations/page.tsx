@@ -1,7 +1,8 @@
 import React from "react";
+import ConversationLayout from "./conversation-layout";
 
 const Page = () => {
-  return <div>Conversation page</div>;
+  return <ConversationLayout>inbox</ConversationLayout>;
 };
 
 export default Page;
