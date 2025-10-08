@@ -1,6 +1,6 @@
 "use client";
 
-import { api } from "../../../../packages/backend/convex/_generated/api";
+import { api } from "@repo/backend/convex/_generated/api";
 
 import { useQuery } from "convex/react";
 import { useUser } from "@clerk/nextjs";

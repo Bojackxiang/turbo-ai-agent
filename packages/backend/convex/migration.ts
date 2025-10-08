@@ -11,11 +11,11 @@ export const fixConversationSchema = mutation({
     for (const conversation of conversations) {
       // Check if the document has the old field name
       if (
-        (conversation as any).contactSessionid &&
+        (conversation as any).contactSessionId &&
         !conversation.contactSessionId
       ) {
         await ctx.db.patch(conversation._id, {
-          contactSessionId: (conversation as any).contactSessionid,
+          contactSessionId: (conversation as any).contactSessionId,
         });
 
         // Note: We can't remove the old field in the same operation
