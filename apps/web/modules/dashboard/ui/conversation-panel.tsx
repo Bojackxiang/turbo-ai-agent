@@ -14,6 +14,7 @@ import { useState } from "react";
 
 // shadcn component
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectTrigger,
@@ -91,7 +92,7 @@ const ConversationPanel = () => {
     {
       status: filterValue as "all" | "unresolved" | "escalated" | "resolved",
     },
-    { initialNumItems: 20 }
+    { initialNumItems: 3 }
   );
 
   const handleConversationClick = (
@@ -100,6 +101,10 @@ const ConversationPanel = () => {
   ) => {
     // TODO: Navigate to conversation detail or open chat view
     console.log("Open conversation:", { conversationId, threadId });
+  };
+
+  const handleLoadMore = () => {
+    conversations.loadMore(3);
   };
 
   console.log(JSON.stringify(conversations, null, 2));
@@ -306,6 +311,30 @@ const ConversationPanel = () => {
                 </div>
               );
             })}
+
+            {/* Load More Button */}
+            {conversations.status === "CanLoadMore" && (
+              <div className="p-2 sm:p-3 border-t border-slate-200">
+                <Button
+                  onClick={handleLoadMore}
+                  variant="outline"
+                  className="w-full h-8 sm:h-10 text-xs sm:text-sm bg-white hover:bg-slate-50 border-slate-200 text-slate-700 hover:text-slate-900 transition-all duration-200"
+                  disabled={conversations.isLoading}
+                >
+                  {conversations.isLoading ? (
+                    <div className="flex items-center space-x-2">
+                      <div className="animate-spin rounded-full h-3 w-3 sm:h-4 sm:w-4 border-b-2 border-slate-400"></div>
+                      <span>Loading...</span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center space-x-2">
+                      <MessageCircle className="h-3 w-3 sm:h-4 sm:w-4" />
+                      <span>Load More Conversations</span>
+                    </div>
+                  )}
+                </Button>
+              </div>
+            )}
           </div>
         ) : (
           <NoMessagePlaceHolder />
