@@ -3,6 +3,7 @@ import OrgGuard from "@/modules/auth/ui/components/org-guard";
 import { cookies } from "next/headers";
 import React from "react";
 import { AppSidebar } from "../ui/AppSidebar";
+import { Provider } from "jotai";
 
 const DashboardLayout = async ({ children }: React.PropsWithChildren) => {
   const cookieStore = await cookies();
@@ -10,12 +11,14 @@ const DashboardLayout = async ({ children }: React.PropsWithChildren) => {
 
   return (
     <>
-      <OrgGuard>
-        <SidebarProvider defaultOpen={defaultOpen}>
-          <AppSidebar />
-          <main className="flex flex-1 flex-col">{children}</main>
-        </SidebarProvider>
-      </OrgGuard>
+      <Provider>
+        <OrgGuard>
+          <SidebarProvider defaultOpen={defaultOpen}>
+            <AppSidebar />
+            <main className="flex flex-1 flex-col h-screen">{children}</main>
+          </SidebarProvider>
+        </OrgGuard>
+      </Provider>
     </>
   );
 };

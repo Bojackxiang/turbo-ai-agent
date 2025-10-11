@@ -11,6 +11,7 @@ import {
   XCircle,
 } from "lucide-react";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 // shadcn component
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -86,6 +87,7 @@ const extractMessageText = (lastMessage: any): string => {
 
 const ConversationPanel = () => {
   const [filterValue, setFilterValue] = useState("all");
+  const router = useRouter();
 
   const conversations = usePaginatedQuery(
     api.public.conversation.getAllForAdmin,
@@ -99,8 +101,7 @@ const ConversationPanel = () => {
     conversationId: string,
     threadId: string
   ) => {
-    // TODO: Navigate to conversation detail or open chat view
-    console.log("Open conversation:", { conversationId, threadId });
+    router.push(`/conversations/${conversationId}`);
   };
 
   const handleLoadMore = () => {
@@ -158,7 +159,7 @@ const ConversationPanel = () => {
         </Select>
       </div>
 
-      <ScrollArea className="flex-1">
+      <ScrollArea className="flex-1 h-0">
         {conversations.isLoading ? (
           <div className="flex items-center justify-center p-8">
             <div className="flex items-center space-x-2 text-slate-500">
