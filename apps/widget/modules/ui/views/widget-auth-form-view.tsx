@@ -1,8 +1,6 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { useState } from "react";
 import { useMutation } from "convex/react";
 import { api } from "@repo/backend/convex/_generated/api";
@@ -15,21 +13,40 @@ import {
   screenAtom,
 } from "@/modules/atoms/widget-atoms";
 
-// Zod schema for form validation
-const formSchema = z.object({
-  name: z
-    .string()
-    .min(2, "Name must be at least 2 characters")
-    .max(50, "Name must be less than 50 characters")
-    .regex(/^[a-zA-Z\s]+$/, "Name can only contain letters and spaces"),
-  email: z
-    .string()
-    .email("Please enter a valid email address")
-    .min(5, "Email must be at least 5 characters")
-    .max(100, "Email must be less than 100 characters"),
-});
+// Form validation functions
+const validateName = (name: string) => {
+  if (!name || name.trim().length < 2) {
+    return "Name must be at least 2 characters";
+  }
+  if (name.length > 50) {
+    return "Name must be less than 50 characters";
+  }
+  if (!/^[a-zA-Z\s]+$/.test(name)) {
+    return "Name can only contain letters and spaces";
+  }
+  return true;
+};
 
-type FormData = z.infer<typeof formSchema>;
+const validateEmail = (email: string) => {
+  if (!email || email.trim().length === 0) {
+    return "Email is required";
+  }
+  if (email.length < 5) {
+    return "Email must be at least 5 characters";
+  }
+  if (email.length > 100) {
+    return "Email must be less than 100 characters";
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return "Please enter a valid email address";
+  }
+  return true;
+};
+
+interface FormData {
+  name: string;
+  email: string;
+}
 
 const WidgetAuthFormView = () => {
   const orgId = useAtomValue(organizationIdAtom);
@@ -52,7 +69,6 @@ const WidgetAuthFormView = () => {
     formState: { errors, isValid },
     reset,
   } = useForm<FormData>({
-    resolver: zodResolver(formSchema),
     mode: "onChange", // Validate on change for better UX
   });
 
@@ -111,7 +127,10 @@ const WidgetAuthFormView = () => {
             Full Name
           </label>
           <input
-            {...register("name")}
+            {...register("name", {
+              required: "Name is required",
+              validate: validateName,
+            })}
             type="text"
             id="name"
             placeholder="Enter your full name"
@@ -138,7 +157,10 @@ const WidgetAuthFormView = () => {
             Email Address
           </label>
           <input
-            {...register("email")}
+            {...register("email", {
+              required: "Email is required",
+              validate: validateEmail,
+            })}
             type="email"
             id="email"
             placeholder="Enter your email address"

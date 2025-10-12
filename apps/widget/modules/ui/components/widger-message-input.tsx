@@ -2,22 +2,24 @@
 
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 
-// Zod Schema for message validation
-const messageSchema = z.object({
-  message: z
-    .string()
-    .min(1, "Message cannot be empty")
-    .max(2000, "Message is too long (max 2000 characters)")
-    .trim(),
-});
+// Form validation function
+const validateMessage = (message: string) => {
+  if (!message || message.trim().length === 0) {
+    return "Message cannot be empty";
+  }
+  if (message.length > 2000) {
+    return "Message is too long (max 2000 characters)";
+  }
+  return true;
+};
 
-type MessageFormData = z.infer<typeof messageSchema>;
+interface MessageFormData {
+  message: string;
+}
 
 interface ChatInputProps {
   onSubmit: (message: string) => Promise<void>;
@@ -41,7 +43,6 @@ export const WidgetMessageInput = ({
     reset,
     watch,
   } = useForm<MessageFormData>({
-    resolver: zodResolver(messageSchema),
     mode: "onChange",
     defaultValues: {
       message: "",
@@ -83,7 +84,14 @@ export const WidgetMessageInput = ({
           {/* Message input */}
           <div className="flex-1 relative">
             <Textarea
-              {...register("message")}
+              {...register("message", {
+                required: "Message cannot be empty",
+                maxLength: {
+                  value: 2000,
+                  message: "Message is too long (max 2000 characters)",
+                },
+                validate: (value) => validateMessage(value),
+              })}
               placeholder={placeholder}
               disabled={disabled || isSubmitting}
               onKeyDown={handleKeyDown}
