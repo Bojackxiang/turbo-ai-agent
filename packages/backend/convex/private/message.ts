@@ -32,6 +32,7 @@ export const create = action({
       });
     }
 
+    console.log("backend create message", args);
     await supportAgent.generateText(
       ctx,
       {
