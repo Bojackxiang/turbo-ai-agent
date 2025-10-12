@@ -2,7 +2,7 @@
 
 import { api } from "@repo/backend/convex/_generated/api";
 import { Id } from "@repo/backend/convex/_generated/dataModel";
-import { useAction, useQuery } from "convex/react";
+import { useAction, useMutation, useQuery } from "convex/react";
 import React, { useEffect, useRef, useState } from "react";
 import { useThreadMessages } from "@convex-dev/agent/react";
 import { useForm } from "react-hook-form";
@@ -18,11 +18,20 @@ import {
   Clock,
   CheckCircle2,
   AlertCircle,
+  XCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
+import { action } from "@repo/backend/convex/_generated/server";
 
 // Message form schema
 const messageSchema = z.object({
@@ -69,6 +78,10 @@ const ConversationIdView: React.FC<ConversationIdViewProps> = ({
   const conversation = useQuery(api.private.conversation.getOne, {
     conversationId: conversationId,
   });
+
+  const updateConversationStatus = useMutation(
+    api.private.conversation.updateStatus
+  );
 
   const createMessage = useAction(api.private.message.create);
 
@@ -234,21 +247,68 @@ const ConversationIdView: React.FC<ConversationIdViewProps> = ({
     );
   };
 
+  const onStatusChange = async (
+    newStatus: "unresolved" | "escalated" | "resolved"
+  ) => {
+    if (!conversationId) return;
+    await updateConversationStatus({
+      conversationId,
+      status: newStatus,
+    });
+  };
+
   return (
     <div className="flex flex-col h-full bg-gradient-to-b from-slate-50 to-white">
       {/* Header */}
       <div className="flex-shrink-0 px-6 py-4 border-b border-slate-200 bg-white/80 backdrop-blur-sm">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg">
-            <MessageCircle className="w-5 h-5 text-white" />
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg">
+              <MessageCircle className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <h2 className="text-lg font-semibold text-slate-800">
+                Conversation Chat
+              </h2>
+              <p className="text-sm text-slate-500">
+                ID: {conversationId?.slice(-8)}...
+              </p>
+            </div>
           </div>
-          <div>
-            <h2 className="text-lg font-semibold text-slate-800">
-              Conversation Chat
-            </h2>
-            <p className="text-sm text-slate-500">
-              ID: {conversationId?.slice(-8)}...
-            </p>
+
+          {/* Status Selector */}
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-medium text-slate-600">Status:</span>
+            <Select
+              value={conversation?.status || "unresolved"}
+              onValueChange={(value: "unresolved" | "escalated" | "resolved") =>
+                onStatusChange(value)
+              }
+            >
+              <SelectTrigger className="w-32 h-8 border-slate-200 focus:ring-blue-500/20 focus:border-blue-500">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="unresolved">
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-orange-400"></div>
+                    <span>Unresolved</span>
+                  </div>
+                </SelectItem>
+                <SelectItem value="escalated">
+                  <div className="flex items-center gap-2">
+                    <XCircle className="w-3 h-3 text-red-500" />
+                    <span>Escalated</span>
+                  </div>
+                </SelectItem>
+                <SelectItem value="resolved">
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="w-3 h-3 text-green-500" />
+                    <span>Resolved</span>
+                  </div>
+                </SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
       </div>
@@ -307,7 +367,7 @@ const ConversationIdView: React.FC<ConversationIdViewProps> = ({
                 errors.message ? "border-red-300 focus:border-red-500" : ""
               }`}
               rows={2}
-              disabled={isSubmitting}
+              disabled={isSubmitting || conversation?.status === "resolved"}
             />
 
             {/* Send button */}

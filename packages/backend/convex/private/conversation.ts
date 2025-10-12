@@ -165,3 +165,45 @@ export const create = mutation({
     return conversationId;
   },
 });
+
+export const updateStatus = mutation({
+  args: {
+    conversationId: v.id("conversation"),
+    status: v.union(
+      v.literal("unresolved"),
+      v.literal("escalated"),
+      v.literal("resolved")
+    ),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      throw new ConvexError({
+        message: "Not authenticated",
+        code: "UNAUTHENTICATED",
+      });
+    }
+
+    const orgId = identity.orgId as string;
+    if (!orgId) {
+      throw new ConvexError({
+        message: "Organization ID not found in user identity",
+        code: "UNAUTHENTICATED",
+      });
+    }
+
+    const conversation = await ctx.db.get(args.conversationId);
+    if (!conversation || conversation.orgId !== orgId) {
+      throw new ConvexError({
+        message: "Conversation not found",
+        code: "not_found",
+      });
+    }
+
+    await ctx.db.patch(args.conversationId, {
+      status: args.status,
+    });
+
+    return true;
+  },
+});

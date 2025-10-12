@@ -1,6 +1,14 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, MessageCircle, Clock, User } from "lucide-react";
+import {
+  ArrowLeft,
+  MessageCircle,
+  Clock,
+  User,
+  CheckCircle2,
+  XCircle,
+  AlertCircle,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
   formatTimeAgo,
@@ -75,19 +83,30 @@ export const ConversationCard: React.FC<ConversationCardProps> = ({
                   {isAssistant ? "AI Assistant" : "Customer"}
                 </h3>
                 <div className="flex items-center space-x-1">
-                  <div
-                    className={cn(
-                      "w-2 h-2 rounded-full",
-                      conversation.status === "unresolved"
-                        ? "bg-orange-400"
-                        : conversation.status === "escalated"
-                          ? "bg-red-400"
-                          : "bg-green-400"
-                    )}
-                  ></div>
-                  <span className="text-xs font-medium text-gray-600 capitalize">
-                    {conversation.status}
-                  </span>
+                  {conversation.status === "unresolved" && (
+                    <>
+                      <AlertCircle className="w-3 h-3 text-orange-500" />
+                      <span className="text-xs font-medium text-orange-700 bg-orange-50 px-2 py-0.5 rounded-full">
+                        Unresolved
+                      </span>
+                    </>
+                  )}
+                  {conversation.status === "escalated" && (
+                    <>
+                      <XCircle className="w-3 h-3 text-red-500" />
+                      <span className="text-xs font-medium text-red-700 bg-red-50 px-2 py-0.5 rounded-full">
+                        Escalated
+                      </span>
+                    </>
+                  )}
+                  {conversation.status === "resolved" && (
+                    <>
+                      <CheckCircle2 className="w-3 h-3 text-green-500" />
+                      <span className="text-xs font-medium text-green-700 bg-green-50 px-2 py-0.5 rounded-full">
+                        Resolved
+                      </span>
+                    </>
+                  )}
                 </div>
               </div>
 
