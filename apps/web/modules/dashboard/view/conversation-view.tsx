@@ -367,7 +367,10 @@ const ConversationIdView: React.FC<ConversationIdViewProps> = ({
                 errors.message ? "border-red-300 focus:border-red-500" : ""
               }`}
               rows={2}
-              disabled={isSubmitting || conversation?.status === "resolved"}
+              disabled={
+                isSubmitting ||
+                ["resolved", "escalated"].includes(conversation?.status || "")
+              }
             />
 
             {/* Send button */}

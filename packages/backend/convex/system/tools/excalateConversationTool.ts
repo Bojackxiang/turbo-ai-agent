@@ -12,7 +12,7 @@ export const escalateConversation = createTool({
       return "Error: No thread ID in context";
     }
 
-    await ctx.runMutation(internal.system.conversation.resolve, {
+    await ctx.runMutation(internal.system.conversation.escalate, {
       threadId: ctx.threadId,
     });
 

@@ -6,8 +6,6 @@ export const fixConversationSchema = mutation({
     // Get all conversations
     const conversations = await ctx.db.query("conversation").collect();
 
-    console.log(`Found ${conversations.length} conversations to check`);
-
     for (const conversation of conversations) {
       // Check if the document has the old field name
       if (

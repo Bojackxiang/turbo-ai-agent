@@ -108,8 +108,6 @@ const ConversationPanel = () => {
     conversations.loadMore(3);
   };
 
-  console.log(JSON.stringify(conversations, null, 2));
-
   return (
     <div className="flex h-full w-full flex-col bg-gradient-to-b from-slate-50 to-slate-100 min-w-0">
       <div className="flex flex-col gap-2 sm:gap-3 border-b border-slate-200 p-2 sm:p-4 min-w-0">

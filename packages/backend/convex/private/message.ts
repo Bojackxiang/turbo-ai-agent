@@ -32,19 +32,29 @@ export const create = action({
       });
     }
 
-    console.log("backend create message", args);
-    await supportAgent.generateText(
-      ctx,
-      {
-        threadId: args.threadId,
-      },
-      {
-        prompt: args.prompt,
-        tools: {
-          escalateConversation,
-          resolveConversation,
-        },
-      }
+    const shouldTriggerAgent = ["unresolved", "escalated"].includes(
+      conversation.status || ""
     );
+
+    if (shouldTriggerAgent) {
+      await supportAgent.generateText(
+        ctx,
+        {
+          threadId: args.threadId,
+        },
+        {
+          prompt: args.prompt,
+          tools: {
+            escalateConversation,
+            resolveConversation,
+          },
+        }
+      );
+    } else {
+      await supportAgent.saveMessage(ctx, {
+        threadId: args.threadId,
+        prompt: args.prompt,
+      });
+    }
   },
 });
