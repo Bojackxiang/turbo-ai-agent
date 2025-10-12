@@ -2,6 +2,8 @@ import { ConvexError, v } from "convex/values";
 import { action } from "../_generated/server";
 import { internal } from "../_generated/api";
 import { supportAgent } from "../system/ai/support_agent";
+import { escalateConversation } from "../system/tools/excalateConversationTool";
+import { resolveConversation } from "../system/tools/resolveConversationTool";
 
 export const create = action({
   args: {
@@ -37,6 +39,10 @@ export const create = action({
       },
       {
         prompt: args.prompt,
+        tools: {
+          escalateConversation,
+          resolveConversation,
+        },
       }
     );
   },
