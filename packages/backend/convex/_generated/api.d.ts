@@ -18,6 +18,7 @@ import type * as public_conversation from "../public/conversation.js";
 import type * as public_message from "../public/message.js";
 import type * as public_organization from "../public/organization.js";
 import type * as system_ai_contact_session from "../system/ai/contact_session.js";
+import type * as system_ai_rag from "../system/ai/rag.js";
 import type * as system_ai_support_agent from "../system/ai/support_agent.js";
 import type * as system_conversation from "../system/conversation.js";
 import type * as system_tools_excalateConversationTool from "../system/tools/excalateConversationTool.js";
@@ -50,6 +51,7 @@ declare const fullApi: ApiFromModules<{
   "public/message": typeof public_message;
   "public/organization": typeof public_organization;
   "system/ai/contact_session": typeof system_ai_contact_session;
+  "system/ai/rag": typeof system_ai_rag;
   "system/ai/support_agent": typeof system_ai_support_agent;
   "system/conversation": typeof system_conversation;
   "system/tools/excalateConversationTool": typeof system_tools_excalateConversationTool;

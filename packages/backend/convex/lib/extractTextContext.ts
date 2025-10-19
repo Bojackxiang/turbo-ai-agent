@@ -1,14 +1,9 @@
 import { google } from "@ai-sdk/google";
 import { generateText } from "ai";
 
-import type {
-  StorageActionWriter,
-  GenericActionCtx,
-  GenericDataModel,
-} from "convex/server";
+import type { StorageActionWriter } from "convex/server";
 import { Id } from "../_generated/dataModel";
 import { assert } from "../utils/assert";
-import rag from "../system/ai/rag";
 
 interface ExtractTextOptions {
   storageId: Id<"_storage">;
