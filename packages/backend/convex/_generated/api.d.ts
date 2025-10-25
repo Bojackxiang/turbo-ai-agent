@@ -8,11 +8,6 @@
  * @module
  */
 
-import type * as debug_clearNamespace from "../debug/clearNamespace.js";
-import type * as debug_emptyMessageTracker from "../debug/emptyMessageTracker.js";
-import type * as debug_getOrgIds from "../debug/getOrgIds.js";
-import type * as debug_messageDebug from "../debug/messageDebug.js";
-import type * as debug_ragDebug from "../debug/ragDebug.js";
 import type * as lib_extractTextContext from "../lib/extractTextContext.js";
 import type * as migration from "../migration.js";
 import type * as private_conversation from "../private/conversation.js";
@@ -48,11 +43,6 @@ import type {
  * ```
  */
 declare const fullApi: ApiFromModules<{
-  "debug/clearNamespace": typeof debug_clearNamespace;
-  "debug/emptyMessageTracker": typeof debug_emptyMessageTracker;
-  "debug/getOrgIds": typeof debug_getOrgIds;
-  "debug/messageDebug": typeof debug_messageDebug;
-  "debug/ragDebug": typeof debug_ragDebug;
   "lib/extractTextContext": typeof lib_extractTextContext;
   migration: typeof migration;
   "private/conversation": typeof private_conversation;

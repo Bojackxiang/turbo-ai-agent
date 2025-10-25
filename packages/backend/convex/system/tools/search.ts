@@ -40,11 +40,6 @@ export const search = createTool({
       limit: 5,
     });
 
-    logger.info(
-      "Search result entries count:",
-      searchResult.entries?.length || 0
-    );
-
     const contextText = `Found result in ${searchResult.entries
       .map((e) => e.title || null)
       .filter((t) => t !== null)
