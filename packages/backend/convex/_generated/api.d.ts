@@ -8,6 +8,11 @@
  * @module
  */
 
+import type * as debug_clearNamespace from "../debug/clearNamespace.js";
+import type * as debug_emptyMessageTracker from "../debug/emptyMessageTracker.js";
+import type * as debug_getOrgIds from "../debug/getOrgIds.js";
+import type * as debug_messageDebug from "../debug/messageDebug.js";
+import type * as debug_ragDebug from "../debug/ragDebug.js";
 import type * as lib_extractTextContext from "../lib/extractTextContext.js";
 import type * as migration from "../migration.js";
 import type * as private_conversation from "../private/conversation.js";
@@ -23,8 +28,10 @@ import type * as system_ai_support_agent from "../system/ai/support_agent.js";
 import type * as system_conversation from "../system/conversation.js";
 import type * as system_tools_excalateConversationTool from "../system/tools/excalateConversationTool.js";
 import type * as system_tools_resolveConversationTool from "../system/tools/resolveConversationTool.js";
+import type * as system_tools_search from "../system/tools/search.js";
 import type * as user from "../user.js";
 import type * as utils_assert from "../utils/assert.js";
+import type * as utils_logger from "../utils/logger.js";
 
 import type {
   ApiFromModules,
@@ -41,6 +48,11 @@ import type {
  * ```
  */
 declare const fullApi: ApiFromModules<{
+  "debug/clearNamespace": typeof debug_clearNamespace;
+  "debug/emptyMessageTracker": typeof debug_emptyMessageTracker;
+  "debug/getOrgIds": typeof debug_getOrgIds;
+  "debug/messageDebug": typeof debug_messageDebug;
+  "debug/ragDebug": typeof debug_ragDebug;
   "lib/extractTextContext": typeof lib_extractTextContext;
   migration: typeof migration;
   "private/conversation": typeof private_conversation;
@@ -56,8 +68,10 @@ declare const fullApi: ApiFromModules<{
   "system/conversation": typeof system_conversation;
   "system/tools/excalateConversationTool": typeof system_tools_excalateConversationTool;
   "system/tools/resolveConversationTool": typeof system_tools_resolveConversationTool;
+  "system/tools/search": typeof system_tools_search;
   user: typeof user;
   "utils/assert": typeof utils_assert;
+  "utils/logger": typeof utils_logger;
 }>;
 declare const fullApiWithMounts: typeof fullApi;
 

@@ -3,7 +3,7 @@
 import { api } from "@repo/backend/convex/_generated/api";
 import { Id } from "@repo/backend/convex/_generated/dataModel";
 import { useAction, useMutation, useQuery } from "convex/react";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useThreadMessages } from "@convex-dev/agent/react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -31,7 +31,6 @@ import {
 
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
-import { action } from "@repo/backend/convex/_generated/server";
 
 // Message form schema
 const messageSchema = z.object({
@@ -45,25 +44,6 @@ const messageSchema = z.object({
 type MessageFormData = z.infer<typeof messageSchema>;
 
 // Message type from your actual data structure
-interface Message {
-  _id: string;
-  _creationTime: number;
-  message?: {
-    content: string | Array<{ text: string; type: string; role?: string }>;
-    role: "user" | "assistant";
-  };
-  text: string;
-  order: number;
-  status: "success" | "failed" | "pending";
-  agentName?: string;
-  model?: string;
-  usage?: {
-    totalTokens: number;
-    completionTokens: number;
-    promptTokens: number;
-  };
-  role?: "user" | "assistant";
-}
 
 interface ConversationIdViewProps {
   conversationId: Id<"conversation">;
@@ -127,6 +107,16 @@ const ConversationIdView: React.FC<ConversationIdViewProps> = ({
       throw error;
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter" && e.ctrlKey) {
+      e.preventDefault();
+      const messageValue = watchedMessage.trim();
+      if (messageValue && !isSubmitting && isValid) {
+        handleSubmit(handleAddMessage)();
+      }
     }
   };
 
@@ -332,9 +322,15 @@ const ConversationIdView: React.FC<ConversationIdViewProps> = ({
             )}
 
             {/* Messages */}
-            {messages.results?.map((message: any) => (
-              <MessageBubble key={message._id} message={message} />
-            ))}
+            {messages.results
+              ?.filter((message: any) => {
+                // 过滤掉空消息
+                const text = getMessageText(message);
+                return text && text.trim().length > 0 && text !== "No content";
+              })
+              ?.map((message: any) => (
+                <MessageBubble key={message._id} message={message} />
+              ))}
 
             {/* Loading indicator */}
             {isSubmitting && (
@@ -362,7 +358,8 @@ const ConversationIdView: React.FC<ConversationIdViewProps> = ({
           <div className="relative">
             <Textarea
               {...register("message")}
-              placeholder="Type your message here..."
+              placeholder="Type your message here... (Ctrl+Enter to send)"
+              onKeyDown={handleKeyDown}
               className={`resize-none pr-12 rounded-xl border-slate-200 focus:border-blue-500 focus:ring-blue-500/20 ${
                 errors.message ? "border-red-300 focus:border-red-500" : ""
               }`}

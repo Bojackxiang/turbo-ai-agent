@@ -4,6 +4,8 @@ import { internal } from "../_generated/api";
 import { supportAgent } from "../system/ai/support_agent";
 import { escalateConversation } from "../system/tools/excalateConversationTool";
 import { resolveConversation } from "../system/tools/resolveConversationTool";
+import { search } from "../system/tools/search";
+import { logger } from "../utils/logger";
 
 export const create = action({
   args: {
@@ -11,6 +13,13 @@ export const create = action({
     threadId: v.string(),
   },
   handler: async (ctx, args) => {
+    if (!args.prompt || args.prompt.trim().length === 0) {
+      throw new ConvexError({
+        message: "Message cannot be empty",
+        code: "invalid_argument",
+      });
+    }
+
     const conversation = await ctx.runQuery(
       internal.system.conversation.getByThreadId,
       {
@@ -37,6 +46,12 @@ export const create = action({
     );
 
     if (shouldTriggerAgent) {
+      const registeredTools = {
+        escalateConversation,
+        resolveConversation,
+        search,
+      };
+
       await supportAgent.generateText(
         ctx,
         {
@@ -44,16 +59,18 @@ export const create = action({
         },
         {
           prompt: args.prompt,
-          tools: {
-            escalateConversation,
-            resolveConversation,
-          },
+          tools: registeredTools,
         }
       );
+
+      logger.info("=== Finished supportAgent.generateText ===");
     } else {
       await supportAgent.saveMessage(ctx, {
         threadId: args.threadId,
-        prompt: args.prompt,
+        message: {
+          role: "user",
+          content: args.prompt,
+        },
       });
     }
   },

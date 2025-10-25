@@ -5,18 +5,14 @@ import {
   Entry,
   EntryId,
   guessMimeTypeFromContents,
-  guessMimeTypeFromExtension,
   vEntryId,
-  vNamespaceId,
 } from "@convex-dev/rag";
-import { file } from "zod/v4";
 import { extractTextContent } from "../lib/extractTextContext";
 import rag from "../system/ai/rag";
 import { assert } from "../utils/assert";
-import { updateStatus } from "./conversation";
 import { Id } from "../_generated/dataModel";
 import { paginationOptsValidator } from "convex/server";
-import { metadata } from "../../../../apps/widget/app/layout";
+import { logger } from "../utils/logger";
 
 export const list = query({
   args: {
@@ -40,6 +36,7 @@ export const list = query({
     const namespace = await rag.getNamespace(ctx, {
       namespace: orgId,
     });
+
     if (!namespace) {
       return { page: [], isDone: true, continueCursor: "" };
     }
@@ -61,12 +58,6 @@ export const list = query({
 
     return {
       page: filteredFiles,
-      isDone: result.isDone,
-      continueCursor: result.continueCursor,
-    };
-
-    return {
-      page: files,
       isDone: result.isDone,
       continueCursor: result.continueCursor,
     };
@@ -106,11 +97,12 @@ export const addFile = action({
       fileName,
       mimeType: mimeType,
       bytes,
+      maxLength: 3000, // 增加到 3000 字符以获得更丰富的内容
     });
 
     const { entryId, created } = await rag.add(ctx, {
       namespace: orgId,
-      text: text.summary,
+      text: text.summary, // 临时保持使用 summary，但我们需要确保 summary 包含足够的内容
       title: fileName,
       key: fileName,
       metadata: {
@@ -118,6 +110,9 @@ export const addFile = action({
         uploadBy: orgId,
         fileName,
         category: category || null,
+        fullText: text.summary,
+        keyPoints: text.keyPoints,
+        topics: text.topics,
       },
       contentHash: await contentHashFromArrayBuffer(bytes),
     });

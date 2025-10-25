@@ -8,22 +8,27 @@ export const resolveConversation = createTool({
     "Resolve a support conversation by summarizing the issue and the resolution.",
   args: z.object({}),
   handler: async (ctx) => {
-    if (!ctx.threadId) {
-      return "Error: No thread ID in context";
+    try {
+      if (!ctx.threadId) {
+        return "Error: No thread ID in context";
+      }
+
+      await ctx.runMutation(internal.system.conversation.resolve, {
+        threadId: ctx.threadId,
+      });
+    } catch (error) {
+      await supportAgent.saveMessage(ctx, {
+        threadId: ctx.threadId || "",
+        message: {
+          role: "assistant",
+          content: `Error resolving conversation: ${
+            error instanceof Error ? error.message : String(error)
+          }`,
+        },
+      });
+      return `Error resolving conversation: ${
+        error instanceof Error ? error.message : String(error)
+      }`;
     }
-
-    await ctx.runMutation(internal.system.conversation.resolve, {
-      threadId: ctx.threadId,
-    });
-
-    await supportAgent.saveMessage(ctx, {
-      threadId: ctx.threadId,
-      message: {
-        role: "assistant",
-        content: "The conversation has been resolved.",
-      },
-    });
-
-    return "Conversation resolved";
   },
 }) as ReturnType<typeof createTool>;
