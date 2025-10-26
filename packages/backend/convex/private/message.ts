@@ -1,8 +1,15 @@
+// External dependencies
 import { ConvexError, v } from "convex/values";
+
+// Convex generated
 import { action } from "../_generated/server";
 import { internal } from "../_generated/api";
+
+// AI system
 import { supportAgent } from "../system/ai/support_agent";
-import { escalateConversation } from "../system/tools/excalateConversationTool";
+
+// Tools
+import { escalateConversation } from "../system/tools/escalateConversationTool";
 import { resolveConversation } from "../system/tools/resolveConversationTool";
 import { search } from "../system/tools/search";
 
