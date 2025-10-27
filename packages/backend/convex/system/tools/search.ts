@@ -45,6 +45,8 @@ export const search = createTool({
       .filter((t) => t !== null)
       .join(", ")}. Here is the context : ${searchResult.text}`;
 
+    logger.info("Search Tool Result:", { contextText });
+
     return contextText;
   },
 });

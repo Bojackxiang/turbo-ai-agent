@@ -27,6 +27,15 @@ const INSTRUCTION_SECTIONS = {
     "Using 'escalateConversation' tool to escalate issues when user frustration is detected or user asks.",
   ],
 
+  // Handling irrelevant or off-topic requests
+  offTopicHandling: [
+    "If the user asks for something completely unrelated to your product/service (e.g., 'order a pizza', 'weather forecast', 'tell me a joke'), follow these steps:",
+    "1. Search the knowledge base first to confirm there's no relevant information.",
+    "2. If search returns no results or irrelevant results, politely inform the user: 'I apologize, but I cannot help with that request as it's outside my knowledge base and area of support.'",
+    "3. Then ask: 'Would you like me to connect you with a human customer service representative who might be able to assist you better?'",
+    "4. If they agree, use the 'escalateConversation' tool to connect them to a human agent.",
+  ],
+
   // Problem-solving approach
   problemSolving: [
     "Provide step-by-step solutions when appropriate.",
@@ -42,6 +51,7 @@ const SUPPORT_AGENT_INSTRUCTIONS = [
   ...INSTRUCTION_SECTIONS.identity,
   ...INSTRUCTION_SECTIONS.communication,
   ...INSTRUCTION_SECTIONS.tools,
+  ...INSTRUCTION_SECTIONS.offTopicHandling,
   ...INSTRUCTION_SECTIONS.problemSolving,
   "Remember: NEVER answer without searching first. Always call 'search' tool for any user query.",
 ].join(" ");
