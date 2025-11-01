@@ -10,6 +10,7 @@ const VapiViews = () => {
   const vapiPlugin = useQuery(api.private.plugin.getOne, { service: "vapi" });
   console.log("vapiPlugin: ", vapiPlugin);
   const upsert = useMutation(api.private.secret.create);
+  const createPlugin = useMutation(api.private.plugin.create);
 
   const onButtonClick = async () => {
     // TODO: Implement VAPI service trigger logic
@@ -22,11 +23,17 @@ const VapiViews = () => {
     publicKey: string;
     privateKey: string;
   }) => {
-    console.log("VAPI credentials submitted:", data);
-    upsert({
+    await new Promise((resolve) => setTimeout(resolve, 3000));
+
+    await upsert({
       serviceName: "vapi",
       privateKey: data.privateKey,
       publicKey: data.publicKey,
+    });
+
+    await createPlugin({
+      serviceName: "vapi",
+      service: "vapi",
     });
   };
 

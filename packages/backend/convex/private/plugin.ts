@@ -6,7 +6,6 @@ export const create = mutation({
   args: {
     serviceName: v.string(),
     service: v.union(v.literal("vapi")),
-    orgId: v.string(),
   },
   handler: async (ctx, args) => {
     try {
