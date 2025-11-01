@@ -1,7 +1,6 @@
 import { ConvexError, v } from "convex/values";
 import { action, query } from "../_generated/server";
 import { internal } from "../_generated/api";
-import { getOne } from "../system/ai/contact_session";
 import { supportAgent } from "../system/ai/support_agent";
 import { paginationOptsValidator } from "convex/server";
 

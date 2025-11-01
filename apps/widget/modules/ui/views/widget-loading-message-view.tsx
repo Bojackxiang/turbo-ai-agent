@@ -10,6 +10,8 @@ import {
 } from "@/modules/atoms/widget-atoms";
 import { useAction, useMutation } from "convex/react";
 import { api } from "@repo/backend/convex/_generated/api";
+import { vapiSecretItem } from "../../atoms/widget-atoms";
+import { getVapiSecret } from "../../../../../packages/backend/convex/public/secret";
 
 interface WidgetLoadingMessageViewProps {
   message?: string;
@@ -38,6 +40,7 @@ const WidgetLoadingMessageView = ({
   const loadingMessage = useAtomValue(loadingMessageAtom);
   const setLoadingMessage = useSetAtom(loadingMessageAtom);
   const setErrorMessage = useSetAtom(errorMessageAtom);
+  const vapiSecretItemValue = useAtomValue(vapiSecretItem);
   const [organizationId, setOrganizationId] = useAtom(organizationIdAtom);
 
   const effectiveOrgId = organizationId || orgId;
@@ -45,6 +48,7 @@ const WidgetLoadingMessageView = ({
     contactSessionIdAtomFamily(effectiveOrgId || "")
   );
   const setScreen = useSetAtom(screenAtom);
+  const setVapiSecret = useSetAtom(vapiSecretItem);
 
   // step 1 validate org
   const orgValidation = useAction(api.public.organization.validate);
@@ -142,6 +146,40 @@ const WidgetLoadingMessageView = ({
 
     setScreen(hasValidSession ? "selection" : "auth");
   }, [step, sessionValid, setScreen, contactSessionId]);
+
+  // step 3.5
+  useEffect(() => {
+    if (step !== "settings") {
+      return;
+    }
+
+    setTimeout(() => {
+      setLoadingMessage("Loading settings...");
+      setStep("vapi");
+    }, 2000);
+  }, [step, setStep, setLoadingMessage]);
+
+  // step 4 load vapi secret
+  const vapiSecret = vapiSecretItemValue?.publicApiKey;
+  const getVapiSecretAction = useAction(api.public.secret.getVapiSecret);
+  useEffect(() => {
+    if (step !== "vapi" || !orgId) {
+      return;
+    }
+    setLoadingMessage("Loading Vapi API key...");
+    getVapiSecretAction({ orgId })
+      .then((orgSecret) => {
+        setVapiSecret({
+          publicApiKey: orgSecret,
+        });
+        setStep("done");
+      })
+      .catch((err: unknown) => {
+        console.log("error loading vapi secret", err);
+        setVapiSecret(null);
+        setStep("done");
+      });
+  }, [step, orgId, setLoadingMessage, getVapiSecretAction, setVapiSecret]);
 
   const getLoadingStyling = (type: string) => {
     switch (type) {

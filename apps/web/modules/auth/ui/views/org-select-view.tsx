@@ -1,6 +1,5 @@
 import React from "react";
 
-import { AuthLayout } from "../components/auth-layout";
 import { OrganizationList } from "@clerk/nextjs";
 
 export const OrgSelectView = () => {

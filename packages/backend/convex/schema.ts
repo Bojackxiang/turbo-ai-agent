@@ -2,6 +2,20 @@ import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 
 export default defineSchema({
+  secrets: defineTable({
+    orgId: v.string(),
+    serviceName: v.string(),
+    secretName: v.string(),
+    publicKey: v.string(),
+    privateKey: v.string(),
+  }).index("by_orgId", ["orgId"]),
+  plugin: defineTable({
+    orgId: v.string(),
+    service: v.union(v.literal("vapi")),
+    secretName: v.string(),
+  })
+    .index("by_orgId", ["orgId"])
+    .index("by_orgId_and_service", ["orgId", "service"]),
   conversation: defineTable({
     threadId: v.string(),
     orgId: v.string(),

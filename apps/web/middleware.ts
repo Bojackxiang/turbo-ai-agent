@@ -21,6 +21,11 @@ const isOrgFreeRoute = createRouteMatcher([
 export default clerkMiddleware(async (auth, req) => {
   const { userId, orgId } = await auth();
 
+  // 如果用户已登录且访问根路径，重定向到 dashboard
+  if (userId && req.nextUrl.pathname === "/") {
+    return NextResponse.redirect(new URL("/dashboard", req.url));
+  }
+
   if (!isPublicRoute(req)) {
     await auth.protect();
   }

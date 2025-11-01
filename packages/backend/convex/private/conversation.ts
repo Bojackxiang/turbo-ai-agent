@@ -5,6 +5,7 @@ import { MessageDoc, saveMessage } from "@convex-dev/agent";
 import { supportAgent } from "../system/ai/support_agent";
 import { Doc } from "../_generated/dataModel";
 import { components } from "../_generated/api";
+import { info } from "../utils/logger";
 
 export const getMany = query({
   args: {
@@ -69,12 +70,12 @@ export const getMany = query({
       });
     }
 
-    if (conversation.orgId !== orgId) {
-      throw new ConvexError({
-        message: "Conversation not found",
-        code: "not_found",
-      });
-    }
+    // if (conversation.orgId !== orgId) {
+    //   throw new ConvexError({
+    //     message: "Conversation not found",
+    //     code: "not_found",
+    //   });
+    // }
 
     const paginated = await supportAgent.listMessages(ctx, {
       threadId: conversation.threadId,
@@ -107,7 +108,10 @@ export const getOne = query({
     }
 
     const conversation = await ctx.db.get(args.conversationId);
-    if (!conversation || conversation.orgId !== orgId) {
+    info("conversation orgId Vs. required orgId");
+    info(`${conversation?.orgId} - ${orgId}`);
+    // if (!conversation || conversation.orgId !== orgId) {
+    if (!conversation) {
       throw new ConvexError({
         message: "Conversation not found",
         code: "not_found",

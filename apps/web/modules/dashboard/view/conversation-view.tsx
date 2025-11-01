@@ -177,9 +177,7 @@ const ConversationIdView: React.FC<ConversationIdViewProps> = ({
           </div>
         )}
 
-        <div
-          className={`group max-w-[80%] ${isAssistant ? "order-1" : "order-2"}`}
-        >
+        <div className="group max-w-[80%]">
           {/* Message header */}
           <div
             className={`flex items-center gap-2 mb-1 ${isAssistant ? "justify-start" : "justify-end"}`}
@@ -229,7 +227,7 @@ const ConversationIdView: React.FC<ConversationIdViewProps> = ({
         </div>
 
         {!isAssistant && (
-          <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-slate-400 to-slate-500 flex items-center justify-center shadow-lg order-1">
+          <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-slate-400 to-slate-500 flex items-center justify-center shadow-lg">
             <User className="w-4 h-4 text-white" />
           </div>
         )}

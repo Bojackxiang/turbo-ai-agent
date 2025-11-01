@@ -9,6 +9,9 @@ export const errorMessageAtom = atom<string | null>(null);
 export const loadingMessageAtom = atom<string | null>(null);
 export const organizationIdAtom = atom<string | null>(null);
 export const screenAtom = atom<WidgetScreen>("loading");
+export const vapiSecretItem = atom<{
+  publicApiKey: string;
+} | null>(null);
 
 export const contactSessionIdAtomFamily = atomFamily((orgId: string) =>
   atomWithStorage<Id<"contactSession"> | null>(

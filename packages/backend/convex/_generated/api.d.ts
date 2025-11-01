@@ -9,19 +9,25 @@
  */
 
 import type * as lib_extractTextContext from "../lib/extractTextContext.js";
+import type * as lib_secret from "../lib/secret.js";
 import type * as migration from "../migration.js";
 import type * as private_conversation from "../private/conversation.js";
 import type * as private_file from "../private/file.js";
 import type * as private_message from "../private/message.js";
+import type * as private_plugin from "../private/plugin.js";
+import type * as private_secret from "../private/secret.js";
 import type * as public_contact_session from "../public/contact_session.js";
 import type * as public_conversation from "../public/conversation.js";
 import type * as public_message from "../public/message.js";
 import type * as public_organization from "../public/organization.js";
+import type * as public_secret from "../public/secret.js";
 import type * as system_ai_contact_session from "../system/ai/contact_session.js";
 import type * as system_ai_rag from "../system/ai/rag.js";
 import type * as system_ai_support_agent from "../system/ai/support_agent.js";
 import type * as system_constants from "../system/constants.js";
 import type * as system_conversation from "../system/conversation.js";
+import type * as system_plugin from "../system/plugin.js";
+import type * as system_secret from "../system/secret.js";
 import type * as system_tools_escalateConversationTool from "../system/tools/escalateConversationTool.js";
 import type * as system_tools_resolveConversationTool from "../system/tools/resolveConversationTool.js";
 import type * as system_tools_search from "../system/tools/search.js";
@@ -45,19 +51,25 @@ import type {
  */
 declare const fullApi: ApiFromModules<{
   "lib/extractTextContext": typeof lib_extractTextContext;
+  "lib/secret": typeof lib_secret;
   migration: typeof migration;
   "private/conversation": typeof private_conversation;
   "private/file": typeof private_file;
   "private/message": typeof private_message;
+  "private/plugin": typeof private_plugin;
+  "private/secret": typeof private_secret;
   "public/contact_session": typeof public_contact_session;
   "public/conversation": typeof public_conversation;
   "public/message": typeof public_message;
   "public/organization": typeof public_organization;
+  "public/secret": typeof public_secret;
   "system/ai/contact_session": typeof system_ai_contact_session;
   "system/ai/rag": typeof system_ai_rag;
   "system/ai/support_agent": typeof system_ai_support_agent;
   "system/constants": typeof system_constants;
   "system/conversation": typeof system_conversation;
+  "system/plugin": typeof system_plugin;
+  "system/secret": typeof system_secret;
   "system/tools/escalateConversationTool": typeof system_tools_escalateConversationTool;
   "system/tools/resolveConversationTool": typeof system_tools_resolveConversationTool;
   "system/tools/search": typeof system_tools_search;
