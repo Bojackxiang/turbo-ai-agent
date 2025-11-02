@@ -1,7 +1,13 @@
 "use client";
 
 import React, { useState } from "react";
-import { LucideIcon, Sparkles, ArrowRight, Loader2 } from "lucide-react";
+import {
+  LucideIcon,
+  Sparkles,
+  ArrowRight,
+  Loader2,
+  Trash2,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
@@ -15,6 +21,7 @@ interface PluginCardProps {
   description?: string;
   messages: Message[];
   onServiceTrigger: () => void | Promise<void>;
+  removePlugin?: () => void | Promise<void>;
   buttonText?: string;
   gradient?: {
     from: string;
@@ -28,11 +35,13 @@ const PluginCard: React.FC<PluginCardProps> = ({
   description,
   messages,
   onServiceTrigger,
+  removePlugin,
   buttonText = "Trigger Service",
   gradient = { from: "from-blue-500", to: "to-blue-600" },
   disabled = false,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const handleTrigger = async () => {
     setIsLoading(true);
@@ -45,12 +54,53 @@ const PluginCard: React.FC<PluginCardProps> = ({
     }
   };
 
+  const handleRemove = async () => {
+    if (!removePlugin) return;
+    setIsDeleting(true);
+    try {
+      await removePlugin();
+    } catch (error) {
+      console.error("Plugin removal failed:", error);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
   return (
     <Card className="group relative overflow-hidden border-0 bg-gradient-to-br from-white to-slate-50 dark:from-slate-900 dark:to-slate-800 shadow-lg hover:shadow-2xl transition-all duration-300">
       {/* Decorative background gradient */}
       <div
         className={`absolute top-0 right-0 w-64 h-64 bg-gradient-to-br ${gradient.from} ${gradient.to} opacity-5 blur-3xl rounded-full transform translate-x-20 -translate-y-20 group-hover:opacity-10 transition-opacity duration-500`}
       />
+
+      {/* Delete Button - Top Right Corner */}
+      {removePlugin && (
+        <div className="absolute top-4 right-4 z-20">
+          <button
+            onClick={handleRemove}
+            disabled={isDeleting || isLoading}
+            className="group/delete relative w-10 h-10 rounded-xl bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 hover:border-red-400 dark:hover:border-red-500 shadow-md hover:shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden"
+            title="Remove plugin"
+          >
+            {/* Hover background effect */}
+            <div className="absolute inset-0 bg-gradient-to-br from-red-50 to-red-100 dark:from-red-950/30 dark:to-red-900/40 opacity-0 group-hover/delete:opacity-100 transition-opacity duration-200" />
+
+            {/* Icon */}
+            <div className="relative w-full h-full flex items-center justify-center">
+              {isDeleting ? (
+                <Loader2 className="w-5 h-5 text-red-600 dark:text-red-400 animate-spin" />
+              ) : (
+                <Trash2 className="w-5 h-5 text-slate-600 dark:text-slate-400 group-hover/delete:text-red-600 dark:group-hover/delete:text-red-400 group-hover/delete:scale-110 transition-all duration-200" />
+              )}
+            </div>
+
+            {/* Ripple effect on hover */}
+            <div className="absolute inset-0 rounded-xl opacity-0 group-hover/delete:opacity-100 transition-opacity duration-300">
+              <div className="absolute inset-0 rounded-xl bg-red-400/20 dark:bg-red-500/20 animate-pulse" />
+            </div>
+          </button>
+        </div>
+      )}
 
       <div className="relative p-6 md:p-8">
         {/* Header Section */}
