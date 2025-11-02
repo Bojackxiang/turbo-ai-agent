@@ -12,57 +12,15 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import { cn } from "@/lib/utils";
-import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
 import {
-  CreditCardIcon,
-  InboxIcon,
-  LayoutDashboardIcon,
-  LibraryBigIcon,
-  Mic,
-  PaletteIcon,
-} from "lucide-react";
+  customerSupportItems,
+  configurationItems,
+  accountItems,
+} from "@/constant/navigation";
+import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
+
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
-const customerSupportItems = [
-  {
-    title: "Conversations",
-    url: "/conversations",
-    icon: InboxIcon,
-  },
-  {
-    title: "Knowledge Base",
-    url: "/file",
-    icon: LibraryBigIcon,
-  },
-];
-
-const configurationItems = [
-  {
-    title: "Widget Customization",
-    url: "/customization",
-    icon: PaletteIcon,
-  },
-  {
-    title: "Integrations",
-    url: "/integrations",
-    icon: LayoutDashboardIcon,
-  },
-  {
-    title: "Voice Assistant",
-    url: "/plugins/vapi",
-    icon: Mic,
-  },
-];
-
-const accountItems = [
-  {
-    title: "Plan & Billing",
-    url: "/billing",
-    icon: CreditCardIcon,
-  },
-];
 
 export const AppSidebar = () => {
   const pathName = usePathname();
