@@ -16,6 +16,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { VapiDataTab } from "../component/vapi-data-tab";
 const VapiViews = () => {
   const vapiPlugin = useQuery(api.private.plugin.getOne, { service: "vapi" });
 
@@ -125,42 +126,41 @@ const VapiViews = () => {
         </DialogContent>
       </Dialog>
 
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 p-4 md:p-8">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 p-3 sm:p-4 md:p-8">
         {/* Page Header */}
-        <div className="max-w-7xl mx-auto mb-8">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg">
-              <Phone className="w-7 h-7 text-white" />
+        <div className="max-w-7xl mx-auto mb-6 sm:mb-8">
+          <div className="flex items-center gap-3 sm:gap-4 mb-3">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-xl sm:rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg flex-shrink-0">
+              <Phone className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-white" />
             </div>
-            <div>
-              <h1 className="text-4xl font-bold text-slate-900 dark:text-white">
+            <div className="min-w-0 flex-1">
+              <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-slate-900 dark:text-white truncate">
                 VAPI Integration
               </h1>
-              <p className="text-slate-500 dark:text-slate-400 mt-1">
+              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5 sm:mt-1 line-clamp-1">
                 Manage your voice AI and communication services
               </p>
             </div>
           </div>
 
           {/* Info Banner */}
-          <div className="flex justify-center">
-            <div className="max-w-3xl mt-6 p-4 rounded-xl bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 flex items-start gap-3">
-              <Info className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
-              <div className="flex-1">
-                <p className="text-sm text-blue-800 dark:text-blue-300">
-                  <span className="font-semibold">
-                    VAPI (Voice AI Platform Integration)
-                  </span>{" "}
-                  allows you to trigger phone calls and workflow automations
-                  seamlessly.
-                </p>
-              </div>
+
+          <div className="max-w-7xl mt-4 sm:mt-6 p-3 sm:p-4 rounded-lg sm:rounded-xl bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 flex items-start gap-2 sm:gap-3">
+            <Info className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
+            <div className="flex-1 min-w-0">
+              <p className="text-xs sm:text-sm text-blue-800 dark:text-blue-300">
+                <span className="font-semibold">
+                  VAPI (Voice AI Platform Integration)
+                </span>{" "}
+                allows you to trigger phone calls and workflow automations
+                seamlessly.
+              </p>
             </div>
           </div>
         </div>
 
         {/* Plugin Cards Grid */}
-        <div className="max-w-3xl mx-auto flex justify-center">
+        <div className="max-w-7xl mx-auto mb-8 sm:mb-10 md:mb-12">
           {/* VAPI Phone Call Card */}
           <PluginCard
             title="Voice Call Service"
@@ -184,32 +184,29 @@ const VapiViews = () => {
           />
         </div>
 
-        {/* Additional Services Section */}
-        <div className="max-w-7xl mx-auto mt-8">
-          <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">
-            Coming Soon
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {[
-              { name: "SMS Integration", icon: "💬", status: "In Development" },
-              { name: "Email Automation", icon: "📧", status: "Planned" },
-              { name: "Webhook Triggers", icon: "🔗", status: "Planned" },
-            ].map((service, index) => (
-              <div
-                key={index}
-                className="p-6 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 opacity-60 hover:opacity-100 transition-opacity duration-200"
-              >
-                <div className="text-4xl mb-3">{service.icon}</div>
-                <h3 className="font-semibold text-slate-900 dark:text-white mb-1">
-                  {service.name}
-                </h3>
-                <span className="inline-block px-3 py-1 text-xs font-medium bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-full">
-                  {service.status}
-                </span>
+        {/* Visual Separator with Section Header */}
+        <div className="max-w-7xl mx-auto mb-6 sm:mb-8">
+          <div className="relative">
+            {/* Decorative line with gradient */}
+            <div
+              className="absolute inset-0 flex items-center"
+              aria-hidden="true"
+            >
+              <div className="w-full border-t-2 border-slate-300 dark:border-slate-700" />
+            </div>
+            <div className="relative flex justify-center">
+              <div className="bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 px-4 sm:px-6 py-1.5 sm:py-2 rounded-full border-2 border-slate-200 dark:border-slate-700 shadow-lg">
+                <h2 className="text-sm sm:text-base md:text-lg font-bold text-slate-900 dark:text-white flex items-center gap-1.5 sm:gap-2">
+                  <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 animate-pulse" />
+                  <span className="whitespace-nowrap">VAPI Resources</span>
+                </h2>
               </div>
-            ))}
+            </div>
           </div>
         </div>
+
+        {/* Phone numbers and assistants */}
+        <VapiDataTab />
       </div>
     </>
   );

@@ -1,8 +1,26 @@
 import { internalActionGeneric } from "convex/server";
 import { internal } from "../_generated/api";
-import { internalAction } from "../_generated/server";
+import { internalAction, internalQuery } from "../_generated/server";
 import { upsertSecret } from "../lib/secret";
 import { v } from "convex/values";
+import { Doc } from "../_generated/dataModel";
+
+export const getOneByOrgId = internalQuery({
+  args: {
+    serviceName: v.string(),
+    orgId: v.string(),
+  },
+  handler: async (ctx, args): Promise<Doc<"secrets"> | null> => {
+    // Query the secret by orgId and serviceName
+    const secret = await ctx.db
+      .query("secrets")
+      .withIndex("by_orgId", (q) => q.eq("orgId", args.orgId))
+      .filter((q) => q.eq(q.field("serviceName"), args.serviceName))
+      .unique();
+
+    return secret;
+  },
+});
 
 export const upsert = internalAction({
   args: {
