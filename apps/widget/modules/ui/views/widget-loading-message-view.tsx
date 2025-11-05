@@ -7,11 +7,12 @@ import {
   loadingMessageAtom,
   organizationIdAtom,
   screenAtom,
+  widgetSettingAtom,
 } from "@/modules/atoms/widget-atoms";
-import { useAction, useMutation } from "convex/react";
+import { useAction, useMutation, useQuery } from "convex/react";
 import { api } from "@repo/backend/convex/_generated/api";
 import { vapiSecretItem } from "../../atoms/widget-atoms";
-import { getVapiSecret } from "../../../../../packages/backend/convex/public/secret";
+import { set } from "zod/v4";
 
 interface WidgetLoadingMessageViewProps {
   message?: string;
@@ -42,6 +43,8 @@ const WidgetLoadingMessageView = ({
   const setErrorMessage = useSetAtom(errorMessageAtom);
   const vapiSecretItemValue = useAtomValue(vapiSecretItem);
   const [organizationId, setOrganizationId] = useAtom(organizationIdAtom);
+  const [widgetSettingsValue, setWidgetSettingsValue] =
+    useAtom(widgetSettingAtom);
 
   const effectiveOrgId = organizationId || orgId;
   const contactSessionId = useAtomValue(
@@ -111,7 +114,7 @@ const WidgetLoadingMessageView = ({
 
     if (!contactSessionId) {
       setSessionValid(false);
-      setStep("done");
+      setStep("settings");
       return;
     }
 
@@ -122,10 +125,10 @@ const WidgetLoadingMessageView = ({
       .then((res) => {
         if (res.valid) {
           setSessionValid(true);
-          setStep("done");
+          setStep("settings");
         } else {
           setSessionValid(false);
-          setStep("done");
+          setStep("settings");
         }
       })
       .catch((err: unknown) => {
@@ -148,15 +151,26 @@ const WidgetLoadingMessageView = ({
   }, [step, sessionValid, setScreen, contactSessionId]);
 
   // step 3.5
+  const widgetSettings = useQuery(
+    api.public.widgetSettings.getByOrgId,
+    orgId
+      ? {
+          orgId: orgId || "",
+        }
+      : "skip"
+  );
   useEffect(() => {
     if (step !== "settings") {
       return;
     }
 
-    setTimeout(() => {
-      setLoadingMessage("Loading settings...");
-      setStep("vapi");
-    }, 2000);
+    setLoadingMessage("Loading widget settings...");
+
+    if (widgetSettings !== undefined) {
+      setWidgetSettingsValue(widgetSettings);
+      setStep("done");
+      console.log("widgetSettingsValue: ", widgetSettingsValue);
+    }
   }, [step, setStep, setLoadingMessage]);
 
   // step 4 load vapi secret

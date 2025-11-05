@@ -2,7 +2,7 @@ import { atom } from "jotai";
 import { WidgetScreen } from "../types";
 import { atomFamily, atomWithStorage } from "jotai/utils";
 import { CONTACT_SESSION_KEY } from "@/constants";
-import { Id } from "@repo/backend/convex/_generated/dataModel";
+import { Doc, Id } from "@repo/backend/convex/_generated/dataModel";
 
 export const conversationIdAtom = atom<Id<"conversation"> | null>(null);
 export const errorMessageAtom = atom<string | null>(null);
@@ -19,3 +19,5 @@ export const contactSessionIdAtomFamily = atomFamily((orgId: string) =>
     null
   )
 );
+
+export const widgetSettingAtom = atom<Doc<"widgetSettings"> | null>(null);
