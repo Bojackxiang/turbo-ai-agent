@@ -1,7 +1,7 @@
 "use client";
 
 import { api } from "@repo/backend/convex/_generated/api";
-import { useAction, useMutation, usePaginatedQuery } from "convex/react";
+import { useMutation, usePaginatedQuery } from "convex/react";
 import { _PublicFile } from "@repo/backend/convex/private/file";
 import UploadDialog from "../../component/upload-dialog";
 import { Card, CardContent } from "@/components/ui/card";
@@ -32,8 +32,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { use, useState } from "react";
-import { file } from "zod/v4";
+import { useState } from "react";
 import { useActionWithConfirm } from "@/components/hooks/useActionWithConfirm";
 
 const FileView = ({ children }: React.PropsWithChildren) => {
@@ -71,14 +70,6 @@ const FileView = ({ children }: React.PropsWithChildren) => {
   };
 
   const fileDelete = useMutation(api.private.file.deleteFile);
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
-  };
 
   const onDelete = useActionWithConfirm({
     title: "Delete File",
