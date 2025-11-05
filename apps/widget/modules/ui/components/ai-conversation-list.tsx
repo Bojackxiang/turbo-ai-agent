@@ -97,6 +97,10 @@ export const AIConversationList = ({
         const isAssistant = getMessageRole(message) === "assistant";
         const content = getMessageContent(message);
 
+        if (content.trim() === "") {
+          return null;
+        }
+
         return (
           <div
             key={message._id}
