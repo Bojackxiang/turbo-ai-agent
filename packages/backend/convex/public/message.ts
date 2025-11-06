@@ -4,6 +4,11 @@ import { internal } from "../_generated/api";
 import { supportAgent } from "../system/ai/support_agent";
 import { paginationOptsValidator } from "convex/server";
 
+// Tools
+import { escalateConversation } from "../system/tools/escalateConversationTool";
+import { resolveConversation } from "../system/tools/resolveConversationTool";
+import { search } from "../system/tools/search";
+
 export const create = action({
   args: {
     prompt: v.string(),
@@ -46,15 +51,38 @@ export const create = action({
       });
     }
 
-    await supportAgent.generateText(
-      ctx,
-      {
-        threadId: args.threadId,
-      },
-      {
-        prompt: args.prompt,
-      }
+    const shouldTriggerAgent = ["unresolved", "escalated"].includes(
+      conversation.status || ""
     );
+
+    if (shouldTriggerAgent) {
+      const registeredTools = {
+        escalateConversation,
+        resolveConversation,
+        search,
+      };
+
+      await supportAgent.generateText(
+        ctx,
+        {
+          threadId: args.threadId,
+        },
+        {
+          prompt: args.prompt,
+          tools: registeredTools,
+        }
+      );
+    } else {
+      await supportAgent.generateText(
+        ctx,
+        {
+          threadId: args.threadId,
+        },
+        {
+          prompt: args.prompt,
+        }
+      );
+    }
   },
 });
 
