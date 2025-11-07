@@ -12,7 +12,6 @@ import {
 import { useAction, useMutation, useQuery } from "convex/react";
 import { api } from "@repo/backend/convex/_generated/api";
 import { vapiSecretItem } from "../../atoms/widget-atoms";
-import { set } from "zod/v4";
 
 interface WidgetLoadingMessageViewProps {
   message?: string;
@@ -150,7 +149,7 @@ const WidgetLoadingMessageView = ({
     setScreen(hasValidSession ? "selection" : "auth");
   }, [step, sessionValid, setScreen, contactSessionId]);
 
-  // step 3.5
+  // step 4 widget settings
   const widgetSettings = useQuery(
     api.public.widgetSettings.getByOrgId,
     orgId
@@ -168,13 +167,11 @@ const WidgetLoadingMessageView = ({
 
     if (widgetSettings !== undefined) {
       setWidgetSettingsValue(widgetSettings);
-      setStep("done");
-      console.log("widgetSettingsValue: ", widgetSettingsValue);
+      setStep("vapi");
     }
   }, [step, setStep, setLoadingMessage]);
 
-  // step 4 load vapi secret
-  const vapiSecret = vapiSecretItemValue?.publicApiKey;
+  // step 5 load vapi secret
   const getVapiSecretAction = useAction(api.public.secret.getVapiSecret);
   useEffect(() => {
     if (step !== "vapi" || !orgId) {
@@ -183,6 +180,7 @@ const WidgetLoadingMessageView = ({
     setLoadingMessage("Loading Vapi API key...");
     getVapiSecretAction({ orgId })
       .then((orgSecret) => {
+        console.log("orgSecret: ", orgSecret);
         setVapiSecret({
           publicApiKey: orgSecret,
         });

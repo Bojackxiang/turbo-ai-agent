@@ -11,16 +11,5 @@ interface Props {
 }
 
 export default function Page({ searchParams }: Props) {
-  const { orgId } = use(searchParams);
-
-  const {
-    isConnected,
-    isConnecting,
-    isSpeaking,
-    transcript,
-    startCall,
-    endCall,
-  } = useVapi();
-
   return <WidgetView />;
 }

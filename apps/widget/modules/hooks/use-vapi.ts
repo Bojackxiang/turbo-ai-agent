@@ -1,4 +1,5 @@
 import Vapi from "@vapi-ai/web";
+import { useAtomValue } from "jotai";
 import { useEffect, useState } from "react";
 
 interface TranscriptMessage {
@@ -6,7 +7,12 @@ interface TranscriptMessage {
   text: string;
 }
 
-export const useVapi = () => {
+interface Props {
+  publicVapiKey?: string | null;
+}
+
+export const useVapi = (props: Props) => {
+  const { publicVapiKey } = props;
   const [vapi, setVapi] = useState<Vapi | null>();
   const [isConnected, setIsConnected] = useState<boolean>(false);
   const [isConnecting, setIsConnecting] = useState<boolean>(false);
@@ -15,7 +21,7 @@ export const useVapi = () => {
   const [transcript, setTranscript] = useState<TranscriptMessage[]>([]);
 
   useEffect(() => {
-    if (!process.env.NEXT_PUBLIC_VAPI_API_KEY) {
+    if (!publicVapiKey) {
       throw new Error("VAPI API key is not set");
     }
 
@@ -68,7 +74,7 @@ export const useVapi = () => {
     return () => {
       vapiInstance.stop();
     };
-  }, []);
+  }, [publicVapiKey]);
 
   const startCall = () => {
     setIsConnecting(true);

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { use, useState } from "react";
 import { MessageCircle, Phone, Headphones, ChevronRight } from "lucide-react";
 import { useAtomValue, useSetAtom } from "jotai";
 import {
@@ -7,6 +7,7 @@ import {
   errorMessageAtom,
   organizationIdAtom,
   screenAtom,
+  vapiSecretItem,
 } from "@/modules/atoms/widget-atoms";
 import { useMutation } from "convex/react";
 import { api } from "@repo/backend/convex/_generated/api";
@@ -34,6 +35,7 @@ const WidgetSelectionView = () => {
   );
   const setError = useSetAtom(errorMessageAtom);
   const setConversationId = useSetAtom(conversationIdAtom);
+  const vapiPublicSecret = useAtomValue(vapiSecretItem);
 
   const createConversation = useMutation(api.public.conversation.create);
 
@@ -112,6 +114,7 @@ const WidgetSelectionView = () => {
         }
         break;
       case "voice":
+        setScreen("voice");
         break;
       case "contact":
         break;
@@ -148,6 +151,11 @@ const WidgetSelectionView = () => {
         <div className="space-y-4">
           {selectionOptions.map((option) => {
             const IconComponent = option.icon;
+
+            // conditions for hide voice option
+            if (option.id === "voice" && !vapiPublicSecret) {
+              return null;
+            }
 
             return (
               <button
