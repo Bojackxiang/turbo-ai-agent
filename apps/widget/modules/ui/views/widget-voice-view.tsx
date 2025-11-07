@@ -16,6 +16,7 @@ import {
   Loader2,
 } from "lucide-react";
 import { useState, useEffect } from "react";
+import { error } from "@repo/backend/convex/utils/logger";
 
 const WidgetVoiceView = () => {
   const secret = useAtomValue(vapiSecretItem);
@@ -30,6 +31,8 @@ const WidgetVoiceView = () => {
     startCall,
     endCall,
   } = useVapi({ publicVapiKey: secret?.publicApiKey });
+
+  console.log(transcript);
 
   // Auto-scroll transcript to bottom
   useEffect(() => {
@@ -105,65 +108,116 @@ const WidgetVoiceView = () => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col">
         {/* Voice Visualization Area */}
-        <div className="flex-1 flex items-center justify-center p-8 relative">
-          {/* Background decoration */}
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-transparent to-blue-500/5 rounded-full"></div>
+        <div className="flex-1 flex flex-col">
+          {/* Voice Circle and Visual */}
+          <div className="flex-1 flex items-center justify-center p-8 relative">
+            {/* Background decoration */}
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-transparent to-blue-500/5 rounded-full"></div>
 
-          <div className="relative">
-            {/* Outer pulse ring for speaking */}
-            {isSpeaking && (
-              <div className="absolute inset-0 rounded-full bg-blue-400/30 animate-ping"></div>
-            )}
-
-            {/* Middle ring for connected state */}
-            {isConnected && (
-              <div className="absolute inset-0 rounded-full bg-blue-500/20 animate-pulse"></div>
-            )}
-
-            {/* Main voice circle */}
-            <div
-              className={cn(
-                "relative w-32 h-32 rounded-full flex items-center justify-center transition-all duration-300 shadow-lg",
-                isConnected
-                  ? "bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-blue-500/30"
-                  : "bg-gradient-to-br from-blue-50 to-blue-100 border-2 border-blue-200 text-blue-500 shadow-blue-200/50",
-                isSpeaking && "scale-110 shadow-xl shadow-blue-500/40"
+            <div className="relative">
+              {/* Outer pulse ring for speaking */}
+              {isSpeaking && (
+                <div className="absolute inset-0 rounded-full bg-blue-400/30 animate-ping"></div>
               )}
-            >
-              {isConnecting ? (
-                <Loader2 className="w-12 h-12 animate-spin text-blue-500" />
-              ) : (
-                <Mic
-                  className={cn(
-                    "w-12 h-12 transition-transform duration-200",
-                    isMuted && "opacity-50"
-                  )}
-                />
+
+              {/* Middle ring for connected state */}
+              {isConnected && (
+                <div className="absolute inset-0 rounded-full bg-blue-500/20 animate-pulse"></div>
+              )}
+
+              {/* Main voice circle */}
+              <div
+                className={cn(
+                  "relative w-32 h-32 rounded-full flex items-center justify-center transition-all duration-300 shadow-lg",
+                  isConnected
+                    ? "bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-blue-500/30"
+                    : "bg-gradient-to-br from-blue-50 to-blue-100 border-2 border-blue-200 text-blue-500 shadow-blue-200/50",
+                  isSpeaking && "scale-110 shadow-xl shadow-blue-500/40"
+                )}
+              >
+                {isConnecting ? (
+                  <Loader2 className="w-12 h-12 animate-spin text-blue-500" />
+                ) : (
+                  <Mic
+                    className={cn(
+                      "w-12 h-12 transition-transform duration-200",
+                      isMuted && "opacity-50"
+                    )}
+                  />
+                )}
+              </div>
+
+              {/* Speaking indicator waves */}
+              {isSpeaking && (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="flex gap-1">
+                    {[...Array(5)].map((_, i) => (
+                      <div
+                        key={i}
+                        className="w-1 bg-blue-400 rounded-full animate-bounce shadow-sm"
+                        style={{
+                          height: `${20 + Math.random() * 20}px`,
+                          animationDelay: `${i * 100}ms`,
+                          animationDuration: "1s",
+                        }}
+                      />
+                    ))}
+                  </div>
+                </div>
               )}
             </div>
+          </div>
 
-            {/* Speaking indicator waves */}
-            {isSpeaking && (
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="flex gap-1">
-                  {[...Array(5)].map((_, i) => (
+          {/* Real-time Conversation Display */}
+          {isConnected && transcript.length > 0 && (
+            <div className="flex-shrink-0 p-4 bg-white/80 backdrop-blur-sm border-t border-blue-200/30">
+              <div className="max-w-2xl mx-auto">
+                <h3 className="text-sm font-medium text-blue-600 mb-3 flex items-center gap-2">
+                  <MessageCircle className="w-4 h-4" />
+                  Live Conversation
+                </h3>
+                <div className="space-y-2 max-h-32 overflow-y-auto">
+                  {transcript.slice(-3).map((message, index) => (
                     <div
-                      key={i}
-                      className="w-1 bg-blue-400 rounded-full animate-bounce shadow-sm"
-                      style={{
-                        height: `${20 + Math.random() * 20}px`,
-                        animationDelay: `${i * 100}ms`,
-                        animationDuration: "1s",
-                      }}
-                    />
+                      key={transcript.length - 3 + index}
+                      className={cn(
+                        "flex items-start gap-3 p-2 rounded-lg transition-all duration-200",
+                        message.role === "user"
+                          ? "bg-blue-50 border-l-4 border-blue-400"
+                          : "bg-gray-50 border-l-4 border-gray-400"
+                      )}
+                    >
+                      <div
+                        className={cn(
+                          "flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium",
+                          message.role === "user"
+                            ? "bg-blue-500 text-white"
+                            : "bg-gray-500 text-white"
+                        )}
+                      >
+                        {message.role === "user" ? "U" : "AI"}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm text-gray-800 leading-relaxed">
+                          {message.text}
+                        </p>
+                      </div>
+                    </div>
                   ))}
                 </div>
+                {transcript.length > 3 && (
+                  <div className="mt-2 text-center">
+                    <span className="text-xs text-blue-500">
+                      Showing last 3 messages • {transcript.length} total
+                    </span>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
 
-        {/* Transcript Section */}
+        {/* Full Transcript Section */}
         {transcript.length > 0 && (
           <div className="border-t border-blue-200/30 bg-gradient-to-r from-blue-50/30 to-transparent">
             <div className="p-4">
@@ -176,11 +230,11 @@ const WidgetVoiceView = () => {
                 <div className="flex items-center gap-2">
                   <MessageCircle className="w-4 h-4 text-blue-500" />
                   <span className="text-blue-600 font-medium">
-                    Conversation ({transcript.length} messages)
+                    Full Conversation History ({transcript.length} messages)
                   </span>
                 </div>
                 <span className="text-xs text-blue-500">
-                  {showTranscript ? "Hide" : "Show"}
+                  {showTranscript ? "Hide" : "Show All"}
                 </span>
               </Button>
 
